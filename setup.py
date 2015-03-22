@@ -49,6 +49,7 @@ setup(
     long_description=(open('README.rst').read()),
     package_data={'libfaketime': [faketime_lib]},
     install_requires=[
+        'contextdecorator',
         'python-dateutil >= 1.3, != 2.0',         # 2.0 is python3-only
     ],
     classifiers=[

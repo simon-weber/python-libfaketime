@@ -1,6 +1,7 @@
 import os
 import sys
 
+from contextdecorator import ContextDecorator
 import dateutil.parser
 
 
@@ -36,21 +37,23 @@ if needs_reload:
     os.execve(*args)
 
 
-def fake_time(datetime_spec):
-    _datetime = datetime_spec
-    if isinstance(datetime_spec, basestring):
-        _datetime = dateutil.parser.parse(datetime_spec)
+class fake_time(ContextDecorator):
+    def __init__(self, datetime_spec):
+        _datetime = datetime_spec
+        if isinstance(datetime_spec, basestring):
+            _datetime = dateutil.parser.parse(datetime_spec)
 
-    libfaketime_spec = _datetime.strftime('%Y-%m-%d %T')
+        self.libfaketime_spec = _datetime.strftime('%Y-%m-%d %T')
 
-    def _fake_time_decorator(f):
-        def _fake_time_wrapper(*args, **kwargs):
-            os.environ['FAKETIME'] = libfaketime_spec
-            try:
-                res = f(*args, **kwargs)
-            finally:
-                del os.environ['FAKETIME']
-            return res
+    def __enter__(self):
+        self.prev_spec = os.environ.get('FAKETIME')
+        os.environ['FAKETIME'] = self.libfaketime_spec
+        return self
 
-        return _fake_time_wrapper
-    return _fake_time_decorator
+    def __exit__(self, *exc):
+        if self.prev_spec is not None:
+            os.environ['FAKETIME'] = self.prev_spec
+        else:
+            del os.environ['FAKETIME']
+
+        return False
