@@ -1,0 +1,3 @@
+include LICENSE README.rst
+recursive-include libfaketime *.py
+recursive-include vendor *
