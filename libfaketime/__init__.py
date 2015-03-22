@@ -1,6 +1,8 @@
 import os
 import sys
 
+import dateutil.parser
+
 
 def _get_shared_lib(basename):
     return os.path.join(
@@ -35,11 +37,20 @@ if needs_reload:
 
 
 def fake_time(datetime_spec):
+    _datetime = datetime_spec
+    if isinstance(datetime_spec, basestring):
+        _datetime = dateutil.parser.parse(datetime_spec)
+
+    libfaketime_spec = _datetime.strftime('%Y-%m-%d %T')
+
     def _fake_time_decorator(f):
         def _fake_time_wrapper(*args, **kwargs):
-            os.environ['FAKETIME'] = datetime_spec
-            res = f(*args, **kwargs)
-            os.environ['FAKETIME'] = ''
+            os.environ['FAKETIME'] = libfaketime_spec
+            try:
+                res = f(*args, **kwargs)
+            finally:
+                del os.environ['FAKETIME']
             return res
+
         return _fake_time_wrapper
     return _fake_time_decorator
