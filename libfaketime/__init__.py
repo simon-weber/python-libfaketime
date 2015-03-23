@@ -11,15 +11,22 @@ def _get_shared_lib(basename):
         os.path.join('..', 'vendor', 'libfaketime', 'src'),
         basename)
 
+_platform_additions = {
+    # keys are the first 5 chars since we don't care about the version.
+    'linux': {
+        'LD_PRELOAD': _get_shared_lib('libfaketime.so.1')
+    },
+    'darwi': {
+        'DYLD_INSERT_LIBRARIES': _get_shared_lib('libfaketime.1.dylib'),
+        'DYLD_FORCE_FLAT_NAMESPACE': '1',
+    },
+}
+
 
 def _get_env_additions():
-    env_additions = {}
-    if sys.platform == "linux" or sys.platform == "linux2":
-        env_additions['LD_PRELOAD'] = _get_shared_lib('libfaketime.so.1')
-    elif sys.platform == "darwin":
-        env_additions['DYLD_INSERT_LIBRARIES'] = _get_shared_lib('libfaketime.1.dylib')
-        env_additions['DYLD_FORCE_FLAT_NAMESPACE'] = '1'
-    else:
+    try:
+        env_additions = _platform_additions[sys.platform[:5]]
+    except KeyError:
         raise RuntimeError("libfaketime does not support platform %s" % sys.platform)
 
     needs_reload = True
@@ -35,6 +42,12 @@ if needs_reload:
     args = [sys.executable, [sys.executable] + sys.argv, os.environ]
     print 're-exec with libfaketime dependencies'
     os.execve(*args)
+
+# All the environment variables have been used at this point.
+# We remove them so that subprocesses don't get faked accidentally.
+for key in env_additions:
+    if key in os.environ:
+        del os.environ[key]
 
 
 class fake_time(ContextDecorator):
