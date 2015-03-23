@@ -70,3 +70,7 @@ class fake_time(ContextDecorator):
             del os.environ['FAKETIME']
 
         return False
+
+    # Freezegun compatibility.
+    start = __enter__
+    stop = __exit__

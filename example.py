@@ -21,4 +21,8 @@ if __name__ == '__main__':
     print test_2001()
     with fake_time('2002-01-01 00:00:00'):
         print datetime.datetime.now()
+    f = fake_time('2003-01-01 00:00:00')
+    f.start()
+    print datetime.datetime.now()
+    f.stop()
     print test_real()
