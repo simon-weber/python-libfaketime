@@ -56,7 +56,7 @@ class fake_time(ContextDecorator):
         if isinstance(datetime_spec, basestring):
             _datetime = dateutil.parser.parse(datetime_spec)
 
-        self.libfaketime_spec = _datetime.strftime('%Y-%m-%d %T')
+        self.libfaketime_spec = _datetime.strftime('%Y-%m-%d %T %f')
 
     def __enter__(self):
         self.prev_spec = os.environ.get('FAKETIME')
