@@ -1,4 +1,4 @@
 [submodule "vendor/libfaketime"]
 	path = vendor/libfaketime
-	url = git@github.com:simon-weber/libfaketime.git
+	url = https://github.com/simon-weber/libfaketime.git
 	branch = python-libfaketime
