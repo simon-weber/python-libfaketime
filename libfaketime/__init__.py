@@ -56,6 +56,7 @@ class fake_time(ContextDecorator):
         if isinstance(datetime_spec, basestring):
             _datetime = dateutil.parser.parse(datetime_spec)
 
+        self.time_to_freeze = _datetime  # freezegun compatibility
         self.libfaketime_spec = _datetime.strftime('%Y-%m-%d %T %f')
 
     def __enter__(self):
