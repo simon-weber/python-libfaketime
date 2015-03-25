@@ -70,7 +70,8 @@ class fake_time(ContextDecorator):
 
     def __enter__(self):
         if not self._should_fake():
-            return
+            print 'not faking'
+            return self
 
         self.prev_spec = os.environ.get('FAKETIME')
         os.environ['FAKETIME'] = self.libfaketime_spec
@@ -78,7 +79,8 @@ class fake_time(ContextDecorator):
 
     def __exit__(self, *exc):
         if not self._should_fake():
-            return
+            print 'not faking'
+            return False
 
         if self.prev_spec is not None:
             os.environ['FAKETIME'] = self.prev_spec
