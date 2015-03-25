@@ -1,5 +1,6 @@
 import os
 import sys
+import threading
 
 from contextdecorator import ContextDecorator
 import dateutil.parser
@@ -43,6 +44,10 @@ if needs_reload:
     print 're-exec with libfaketime dependencies'
     os.execve(*args)
 
+# Assume the first import is the process/thread we want to fake.
+pid = os.getpid()
+assert threading.current_thread().name == 'MainThread'
+
 # All the environment variables have been used at this point.
 # We remove them so that subprocesses don't get faked accidentally.
 for key in env_additions:
@@ -59,12 +64,22 @@ class fake_time(ContextDecorator):
         self.time_to_freeze = _datetime  # freezegun compatibility
         self.libfaketime_spec = _datetime.strftime('%Y-%m-%d %T %f')
 
+    @staticmethod
+    def _should_fake():
+        return os.getpid() == pid and threading.current_thread().name == 'MainThread'
+
     def __enter__(self):
+        if not self._should_fake():
+            return
+
         self.prev_spec = os.environ.get('FAKETIME')
         os.environ['FAKETIME'] = self.libfaketime_spec
         return self
 
     def __exit__(self, *exc):
+        if not self._should_fake():
+            return
+
         if self.prev_spec is not None:
             os.environ['FAKETIME'] = self.prev_spec
         else:
