@@ -1,6 +1,8 @@
 import datetime
 
-from libfaketime import fake_time
+from libfaketime import fake_time, reexec_if_needed
+
+reexec_if_needed()
 
 
 @fake_time('2000-01-01 10:00:05')
