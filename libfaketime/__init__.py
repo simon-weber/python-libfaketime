@@ -12,21 +12,29 @@ def _get_shared_lib(basename):
         os.path.join('..', 'vendor', 'libfaketime', 'src'),
         basename)
 
-_platform_additions = {
-    # keys are the first 5 chars since we don't care about the version.
+# keys are the first 5 chars since we don't care about the version.
+_lib_addition = {
     'linux': {
         'LD_PRELOAD': _get_shared_lib('libfaketime.so.1')
     },
     'darwi': {
         'DYLD_INSERT_LIBRARIES': _get_shared_lib('libfaketime.1.dylib'),
+    },
+}
+
+_other_additions = {
+    'darwi': {
         'DYLD_FORCE_FLAT_NAMESPACE': '1',
     },
 }
 
+_env_additions = _lib_addition.copy()
+_env_additions.update(_other_additions)
+
 
 def get_env_additions():
     try:
-        env_additions = _platform_additions[sys.platform[:5]]
+        env_additions = _env_additions[sys.platform[:5]]
     except KeyError:
         raise RuntimeError("libfaketime does not support platform %s" % sys.platform)
 
@@ -40,8 +48,9 @@ def get_env_additions():
 def reexec_if_needed(remove_vars=True):
     needs_reload, env_additions = get_env_additions()
     if needs_reload:
-        os.environ.update(env_additions)
-        args = [sys.executable, [sys.executable] + sys.argv, os.environ]
+        new_environ = os.environ.copy()
+        new_environ.update(env_additions)
+        args = [sys.executable, [sys.executable] + sys.argv, new_environ]
         print 're-exec with libfaketime dependencies'
         os.execve(*args)
 
