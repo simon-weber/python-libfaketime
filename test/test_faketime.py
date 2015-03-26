@@ -1,3 +1,4 @@
+import datetime
 import os
 from unittest import TestCase
 import sys
@@ -5,6 +6,7 @@ import sys
 from mock import patch
 
 import libfaketime
+from libfaketime import fake_time
 
 
 class TestReexec(TestCase):
@@ -32,3 +34,21 @@ class TestReexec(TestCase):
     @patch('sys.platform', 'win32')
     def test_reexec_windows_fails(self, exec_patch):
         self.assertRaises(RuntimeError, libfaketime.reexec_if_needed)
+
+
+class TestFaketime(TestCase):
+    def test_nonfake_time_is_dynamic(self):
+        # This just makes sure that non-faked time is dynamic;
+        # I can't think of a good way to check that the non-faked time is "real".
+
+        first = datetime.datetime.now().microsecond
+        second = datetime.datetime.now().microsecond
+
+        self.assertGreater(second, first)
+
+    @fake_time(datetime.datetime.now())
+    def test_fake_time_is_static(self):
+        first = datetime.datetime.now().microsecond
+        second = datetime.datetime.now().microsecond
+
+        self.assertEqual(second, first)

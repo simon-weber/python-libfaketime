@@ -1,3 +1,4 @@
+from copy import deepcopy
 import os
 import sys
 import threading
@@ -28,8 +29,10 @@ _other_additions = {
     },
 }
 
-_env_additions = _lib_addition.copy()
-_env_additions.update(_other_additions)
+_env_additions = deepcopy(_lib_addition)
+for platform, d in _other_additions.items():
+    # Just doing a .update wouldn't merge the sub dictionaries.
+    _env_additions[platform].update(d)
 
 
 def get_env_additions():
