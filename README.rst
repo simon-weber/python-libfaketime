@@ -7,7 +7,12 @@ python-libfaketime is a wrapper of `libfaketime <https://github.com/wolfcw/libfa
 
     import datetime
 
-    from libfaketime import fake_time
+    from libfaketime import fake_time, reexec_if_needed
+
+    # libfaketime needs to be preloaded by the dynamic linker.
+    # This will exec the same command, but with the proper environment variables set.
+    # Alternatively, you can manually manage them (see get_reload_information()).
+    reexec_if_needed()
 
     def get_tomorrow():
         return datetime.date.today() + datetime.timedelta(days=1)
@@ -29,3 +34,11 @@ Here's the output of a `totally unscientific benchmark <https://github.com/simon
     $ python benchmark.py freezegun
     timing 1000 executions of <function freeze_time at 0x10aaa1140>
     6.561472 seconds
+
+
+Some brief details:
+
+* linux and osx
+* microsecond resolution
+* accepts datetimes and strings that can be parsed by dateutil
+* not threadsafe
