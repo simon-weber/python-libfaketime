@@ -11,7 +11,7 @@ python-libfaketime is a wrapper of `libfaketime <https://github.com/wolfcw/libfa
 
     # libfaketime needs to be preloaded by the dynamic linker.
     # This will exec the same command, but with the proper environment variables set.
-    # Alternatively, you can manually manage them (see get_reload_information()).
+    # Or you can skip running this and manually manage your env (see get_reload_information()).
     reexec_if_needed()
 
     def get_tomorrow():
