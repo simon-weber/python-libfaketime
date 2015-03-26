@@ -12,7 +12,7 @@ from libfaketime import fake_time
 class TestReexec(TestCase):
     def _assert_successful_reexec(self, exec_patch):
         expected_environ = os.environ.copy()
-        expected_environ.update(libfaketime.get_env_additions()[1])
+        expected_environ.update(libfaketime.get_reload_information()[1])
 
         libfaketime.reexec_if_needed()
 
@@ -23,11 +23,22 @@ class TestReexec(TestCase):
     @patch('os.execve')
     @patch('sys.platform', 'linux2')
     def test_reexec_linux_succeeds(self, exec_patch):
+        needs_reload, env_additions = libfaketime.get_reload_information()
+
+        # We're actually running with libfaketime loaded in right now, but
+        # because we used remove_vars=True, this will return True.
+        self.assertTrue(needs_reload)
+        self.assertEqual(len(env_additions), 1)
+
         self._assert_successful_reexec(exec_patch)
 
     @patch('os.execve')
     @patch('sys.platform', 'darwin')
     def test_reexec_osx_succeeds(self, exec_patch):
+        needs_reload, env_additions = libfaketime.get_reload_information()
+        self.assertTrue(needs_reload)
+        self.assertEqual(len(env_additions), 2)
+
         self._assert_successful_reexec(exec_patch)
 
     @patch('os.execve')

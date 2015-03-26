@@ -35,7 +35,7 @@ for platform, d in _other_additions.items():
     _env_additions[platform].update(d)
 
 
-def get_env_additions():
+def get_reload_information():
     try:
         env_additions = _env_additions[sys.platform[:5]]
     except KeyError:
@@ -49,7 +49,7 @@ def get_env_additions():
 
 
 def reexec_if_needed(remove_vars=True):
-    needs_reload, env_additions = get_env_additions()
+    needs_reload, env_additions = get_reload_information()
     if needs_reload:
         new_environ = os.environ.copy()
         new_environ.update(env_additions)
