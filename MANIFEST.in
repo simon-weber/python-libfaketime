@@ -1,3 +1,3 @@
 include LICENSE README.rst
 recursive-include libfaketime *.py
-recursive-include libfaketime/vendor *.dylib *.so
+recursive-include libfaketime/vendor *.dylib *.so.1
