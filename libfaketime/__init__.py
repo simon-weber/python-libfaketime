@@ -10,7 +10,7 @@ import dateutil.parser
 def _get_shared_lib(basename):
     return os.path.join(
         os.path.dirname(__file__),
-        os.path.join('..', 'vendor', 'libfaketime', 'src'),
+        os.path.join('vendor', 'libfaketime', 'src'),
         basename)
 
 # keys are the first 5 chars since we don't care about the version.
