@@ -45,7 +45,7 @@ setup(
     packages=find_packages(),
     scripts=[],
     license=open('LICENSE').read(),
-    description='TODO',
+    description='A fast alternative to freezegun that wraps libfaketime.',
     long_description=(open('README.rst').read()),
     package_data={'libfaketime': [faketime_lib]},
     install_requires=[
@@ -53,7 +53,7 @@ setup(
         'python-dateutil >= 1.3, != 2.0',         # 2.0 is python3-only
     ],
     classifiers=[
-        # TODO gpl here
+        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
