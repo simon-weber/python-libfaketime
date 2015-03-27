@@ -44,9 +44,9 @@ setup(
     url='http://pypi.python.org/pypi/libfaketime/',
     packages=find_packages(),
     scripts=[],
-    license=open('LICENSE').read(),
+    license='GPLv2',
     description='A fast alternative to freezegun that wraps libfaketime.',
-    long_description=(open('README.rst').read()),
+    long_description=open('README.rst').read(),
     package_data={'libfaketime': [faketime_lib]},
     install_requires=[
         'contextdecorator',
