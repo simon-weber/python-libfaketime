@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import re
 from setuptools import setup, find_packages
 from setuptools.command.install import install
@@ -23,17 +24,22 @@ else:
     raise RuntimeError("Could not find version in '%s'" % VERSIONFILE)
 
 
+_vendor_path = 'libfaketime/vendor/libfaketime'
 if sys.platform == "linux" or sys.platform == "linux2":
-    faketime_lib = 'libfaketime/vendor/libfaketime/src/libfaketime.so.1'
+    faketime_lib = _vendor_path + '/src/libfaketime.so.1'
 elif sys.platform == "darwin":
-    faketime_lib = 'libfaketime/vendor/libfaketime/src/libfaketime.1.dylib'
+    faketime_lib = _vendor_path + '/src/libfaketime.1.dylib'
 else:
     raise RuntimeError("libfaketime does not support platform %s" % sys.platform)
 
 
 class CustomInstall(install):
     def run(self):
-        subprocess.check_call(['make', '-C', 'libfaketime/vendor/libfaketime'])
+        subprocess.check_call(['make', '-C', _vendor_path])
+        dest = os.path.join(self.install_purelib, os.path.dirname(faketime_lib))
+        os.makedirs(dest)
+        self.copy_file(faketime_lib, dest)
+
         install.run(self)
 
 setup(
@@ -47,7 +53,6 @@ setup(
     license='GPLv2',
     description='A fast alternative to freezegun that wraps libfaketime.',
     long_description=open('README.rst').read(),
-    package_data={'libfaketime': [faketime_lib]},
     install_requires=[
         'contextdecorator',
         'python-dateutil >= 1.3, != 2.0',         # 2.0 is python3-only
