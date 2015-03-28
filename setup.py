@@ -37,7 +37,12 @@ class CustomInstall(install):
     def run(self):
         subprocess.check_call(['make', '-C', _vendor_path])
         dest = os.path.join(self.install_purelib, os.path.dirname(faketime_lib))
-        os.makedirs(dest)
+        try:
+            os.makedirs(dest)
+        except OSError as e:
+            if e.errno != 17:
+                raise
+        print faketime_lib, '->', dest
         self.copy_file(faketime_lib, dest)
 
         install.run(self)
