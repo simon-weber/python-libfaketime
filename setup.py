@@ -26,16 +26,20 @@ else:
 
 _vendor_path = 'libfaketime/vendor/libfaketime'
 if sys.platform == "linux" or sys.platform == "linux2":
-    faketime_lib = _vendor_path + '/src/libfaketime.so.1'
+    libname = 'libfaketime.so.1'
 elif sys.platform == "darwin":
-    faketime_lib = _vendor_path + '/src/libfaketime.1.dylib'
+    libname = 'libfaketime.1.dylib'
 else:
     raise RuntimeError("libfaketime does not support platform %s" % sys.platform)
+
+faketime_lib = os.path.join(_vendor_path, 'src', libname)
 
 
 class CustomInstall(install):
     def run(self):
+        self.my_outputs = []
         subprocess.check_call(['make', '-C', _vendor_path])
+
         dest = os.path.join(self.install_purelib, os.path.dirname(faketime_lib))
         try:
             os.makedirs(dest)
@@ -44,8 +48,14 @@ class CustomInstall(install):
                 raise
         print faketime_lib, '->', dest
         self.copy_file(faketime_lib, dest)
+        self.my_outputs.append(os.path.join(dest, libname))
 
         install.run(self)
+
+    def get_outputs(self):
+        outputs = install.get_outputs(self)
+        outputs.extend(self.my_outputs)
+        return outputs
 
 setup(
     name='libfaketime',
