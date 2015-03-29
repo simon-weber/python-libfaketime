@@ -42,3 +42,5 @@ Some brief details:
 * microsecond resolution
 * accepts datetimes and strings that can be parsed by dateutil
 * not threadsafe
+
+To install: ``pip install libfaketime``.
