@@ -6,6 +6,12 @@ import threading
 from contextdecorator import ContextDecorator
 import dateutil.parser
 
+# When using reexec_if_needed, remove_vars=True and a test loader that purges sys.modules
+# (like nose), it can be tough to run reexec_if_needed only once.
+# This env var is set by reexec to ensure we don't reload more than once.
+
+_DID_REEXEC_VAR = 'FAKETIME_DID_REEXEC'
+
 
 def _get_shared_lib(basename):
     return os.path.join(
@@ -41,9 +47,7 @@ def get_reload_information():
     except KeyError:
         raise RuntimeError("libfaketime does not support platform %s" % sys.platform)
 
-    needs_reload = True
-    if len(set(env_additions) & set(os.environ)) == len(env_additions):
-        needs_reload = False
+    needs_reload = os.environ.get(_DID_REEXEC_VAR) != 'true'
 
     return needs_reload, env_additions
 
@@ -53,6 +57,7 @@ def reexec_if_needed(remove_vars=True):
     if needs_reload:
         new_environ = os.environ.copy()
         new_environ.update(env_additions)
+        new_environ[_DID_REEXEC_VAR] = 'true'
         args = [sys.executable, [sys.executable] + sys.argv, new_environ]
         print 're-exec with libfaketime dependencies'
         os.execve(*args)
