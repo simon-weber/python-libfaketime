@@ -68,6 +68,16 @@ def reexec_if_needed(remove_vars=True):
                 del os.environ[key]
 
 
+def begin_callback(instance):
+    """Called just before faking the time."""
+    pass
+
+
+def end_callback(instance):
+    """Called just after finished faking the time."""
+    pass
+
+
 class fake_time(ContextDecorator):
     def __init__(self, datetime_spec, only_main_thread=True):
         self.only_main_thread = only_main_thread
@@ -84,6 +94,7 @@ class fake_time(ContextDecorator):
 
     def __enter__(self):
         if self._should_fake():
+            begin_callback(self)
             self._prev_spec = os.environ.get('FAKETIME')
             os.environ['FAKETIME'] = self.libfaketime_spec
 
@@ -95,6 +106,7 @@ class fake_time(ContextDecorator):
                 os.environ['FAKETIME'] = self._prev_spec
             else:
                 del os.environ['FAKETIME']
+                end_callback(self)
 
         return False
 
