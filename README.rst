@@ -42,5 +42,7 @@ Some brief details:
 * microsecond resolution
 * accepts datetimes and strings that can be parsed by dateutil
 * not threadsafe
+* will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler.
+        
 
 To install: ``pip install libfaketime``.
