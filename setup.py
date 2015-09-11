@@ -63,7 +63,7 @@ setup(
     author='Simon Weber',
     author_email='simon@simonmweber.com',
     url='http://pypi.python.org/pypi/libfaketime/',
-    packages=find_packages(),
+    packages=find_packages(exclude=['test']),
     scripts=[],
     license='GPLv2',
     description='A fast alternative to freezegun that wraps libfaketime.',
