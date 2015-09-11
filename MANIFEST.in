@@ -1,4 +1,4 @@
-include LICENSE README.rst
+include CHANGELOG.rst LICENSE README.rst
 recursive-include libfaketime *.py
 include libfaketime/vendor/libfaketime/Makefile
 include libfaketime/vendor/libfaketime/src/Makefile
