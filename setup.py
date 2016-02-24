@@ -46,7 +46,7 @@ class CustomInstall(install):
         except OSError as e:
             if e.errno != 17:
                 raise
-        print faketime_lib, '->', dest
+        print(faketime_lib, '->', dest)
         self.copy_file(faketime_lib, dest)
         self.my_outputs.append(os.path.join(dest, libname))
 

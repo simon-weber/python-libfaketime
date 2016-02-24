@@ -6,6 +6,11 @@ import threading
 from contextdecorator import ContextDecorator
 import dateutil.parser
 
+try:
+    basestring
+except NameError:
+    basestring = (str, bytes)
+
 # When using reexec_if_needed, remove_vars=True and a test loader that purges sys.modules
 # (like nose), it can be tough to run reexec_if_needed only once.
 # This env var is set by reexec to ensure we don't reload more than once.
@@ -36,7 +41,7 @@ _other_additions = {
 }
 
 _env_additions = deepcopy(_lib_addition)
-for platform, d in _other_additions.items():
+for platform, d in list(_other_additions.items()):
     # Just doing a .update wouldn't merge the sub dictionaries.
     _env_additions[platform].update(d)
 
@@ -59,7 +64,7 @@ def reexec_if_needed(remove_vars=True):
         new_environ.update(env_additions)
         new_environ[_DID_REEXEC_VAR] = 'true'
         args = [sys.executable, [sys.executable] + sys.argv, new_environ]
-        print 're-exec with libfaketime dependencies'
+        print('re-exec with libfaketime dependencies')
         os.execve(*args)
 
     if remove_vars:
