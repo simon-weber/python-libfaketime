@@ -46,7 +46,7 @@ class CustomInstall(install):
         except OSError as e:
             if e.errno != 17:
                 raise
-        print faketime_lib, '->', dest
+        print(faketime_lib, '->', dest)
         self.copy_file(faketime_lib, dest)
         self.my_outputs.append(os.path.join(dest, libname))
 
@@ -80,6 +80,8 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     include_package_data=True,

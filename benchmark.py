@@ -27,10 +27,10 @@ if __name__ == '__main__':
 
     iterations = 1000
 
-    print "timing %s executions of %s" % (iterations, faker)
+    print("timing %s executions of %s" % (iterations, faker))
 
     sum = 0
-    for _ in xrange(iterations):
+    for _ in range(iterations):
         sum += sample(faker)
 
-    print sum, 'seconds'
+    print(sum, 'seconds')
