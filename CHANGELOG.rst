@@ -5,6 +5,12 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+0.2.1
++++++
+released 2016-03-01
+
+- python 3 support
+
 0.1.1
 +++++
 released 2015-09-11
