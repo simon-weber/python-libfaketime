@@ -5,6 +5,12 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+0.3.0
++++++
+released 2016-03-04
+
+- invoking ``libfaketime`` from the command line will now print the necessary environment to avoid a re-exec.
+
 0.2.1
 +++++
 released 2016-03-01
