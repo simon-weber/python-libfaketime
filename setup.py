@@ -89,7 +89,7 @@ setup(
     cmdclass={'install': CustomInstall},
     entry_points={
         'console_scripts': [
-            'libfaketime = libfaketime:main',
+            'python-libfaketime = libfaketime:main',
         ]
     },
 )
