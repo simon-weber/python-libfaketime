@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from copy import deepcopy
 import os
 import sys
@@ -58,10 +60,12 @@ def get_reload_information():
 
 
 def main():  # pragma: nocover
+    """Print the necessary environment to stdout."""
+
     _, _env_additions = get_reload_information()
-    for key, value in _env_additions.iteritems():
-        print 'export %s="%s"' % (key, value)
-    print 'export %s=true' % _DID_REEXEC_VAR
+    for key, value in _env_additions.items():
+        print('export %s="%s"' % (key, value))
+    print('export %s=true' % _DID_REEXEC_VAR)
 
 
 def reexec_if_needed(remove_vars=True):
