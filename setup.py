@@ -87,4 +87,9 @@ setup(
     include_package_data=True,
     zip_safe=False,
     cmdclass={'install': CustomInstall},
+    entry_points={
+        'console_scripts': [
+            'python-libfaketime = libfaketime:main',
+        ]
+    },
 )

@@ -57,6 +57,13 @@ def get_reload_information():
     return needs_reload, env_additions
 
 
+def main():  # pragma: nocover
+    _, _env_additions = get_reload_information()
+    for key, value in _env_additions.iteritems():
+        print 'export %s="%s"' % (key, value)
+    print 'export %s=true' % _DID_REEXEC_VAR
+
+
 def reexec_if_needed(remove_vars=True):
     needs_reload, env_additions = get_reload_information()
     if needs_reload:
