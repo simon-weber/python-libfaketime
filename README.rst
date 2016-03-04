@@ -46,3 +46,20 @@ Some brief details:
         
 
 To install: ``pip install libfaketime``.
+
+
+How to avoid re-exec
+====================
+
+Sometimes, re-exec does unexpected things. You can avoid those problems by preloading `libfaketime` yourself. The environment variables you need
+can be found by running `python-libfaketime` on the command line::
+
+    $ python-libfaketime 
+    export LD_PRELOAD="/home/allard/.virtualenvs/libfaketime/local/lib/python2.7/site-packages/libfaketime/vendor/libfaketime/src/libfaketime.so.1"
+    export FAKETIME_DID_REEXEC=true
+
+You can use them as such::
+
+    eval $(python-libfaketime)
+    nosetests  # for example
+
