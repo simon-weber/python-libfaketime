@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from copy import deepcopy
+import datetime
 import os
 import sys
 import threading
@@ -103,17 +104,22 @@ class fake_time(ContextDecorator):
             _datetime = dateutil.parser.parse(datetime_spec)
 
         self.time_to_freeze = _datetime  # freezegun compatibility
-        self.libfaketime_spec = _datetime.strftime('%Y-%m-%d %T %f')
 
     def _should_fake(self):
         return self.only_main_thread and threading.current_thread().name == 'MainThread'
+
+    def _format_datetime(self, _datetime):
+        return _datetime.strftime('%Y-%m-%d %T %f')
+
+    def tick(self, delta=datetime.timedelta(seconds=1)):
+        self.time_to_freeze += delta
+        os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
 
     def __enter__(self):
         if self._should_fake():
             begin_callback(self)
             self._prev_spec = os.environ.get('FAKETIME')
-            os.environ['FAKETIME'] = self.libfaketime_spec
-
+            os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
         return self
 
     def __exit__(self, *exc):
