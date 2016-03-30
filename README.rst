@@ -47,6 +47,18 @@ Some brief details:
 
 To install: ``pip install libfaketime``.
 
+Use with py.test
+================
+It's easiest to reexec from inside the pytest_configure hook:
+
+.. code-block:: python
+
+    # conftest.py
+    from libfaketime import reexec_if_needed
+
+    def pytest_configure():
+        reexec_if_needed()
+
 
 How to avoid re-exec
 ====================
