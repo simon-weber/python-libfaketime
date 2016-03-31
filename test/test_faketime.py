@@ -57,6 +57,12 @@ class TestFaketime(TestCase):
 
         self.assertGreater(second, first)
 
+    def test_fake_time_tick(self):
+        with fake_time('2000-01-01 10:00:05') as fake:
+            self.assertEqual(datetime.datetime.now(), datetime.datetime(2000, 1, 1, 10, 0, 5))
+            fake.tick(delta=datetime.timedelta(hours=1))
+            self.assertEqual(datetime.datetime.now(), datetime.datetime(2000, 1, 1, 11, 0, 5))
+
     def test_nonfake_time_is_dynamic(self):
         self._assert_time_not_faked()
 
