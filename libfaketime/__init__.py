@@ -129,7 +129,7 @@ class fake_time(ContextDecorator):
 
         if self._should_patch_uuid():
             # Bug fix for uuid1 deadlocks in system level uuid libraries
-            # PR: <INSERT_PR_LINK>
+            # PR: https://github.com/simon-weber/python-libfaketime/pull/14
             self._backup_uuid_generate_time = uuid._uuid_generate_time
             uuid._uuid_generate_time = None
 
