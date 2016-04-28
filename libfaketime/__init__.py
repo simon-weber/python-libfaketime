@@ -5,6 +5,7 @@ import datetime
 import os
 import sys
 import threading
+import unittest
 
 from contextdecorator import ContextDecorator
 import dateutil.parser
@@ -131,6 +132,35 @@ class fake_time(ContextDecorator):
                 end_callback(self)
 
         return False
+
+    def __call__(self, decorable):
+        if isinstance(decorable, unittest.TestCase):
+            # If it's a TestCase, we assume you want to freeze the time for the
+            # tests, from setUpClass to tearDownClass
+            klass = decorable
+
+            # Use getattr as in Python 2.6 they are optional
+            orig_setUpClass = getattr(klass, 'setUpClass', None)
+            orig_tearDownClass = getattr(klass, 'tearDownClass', None)
+
+            @classmethod
+            def setUpClass(cls):
+                self.start()
+                if orig_setUpClass is not None:
+                    orig_setUpClass()
+
+            @classmethod
+            def tearDownClass(cls):
+                if orig_tearDownClass is not None:
+                    orig_tearDownClass()
+                self.stop()
+
+            klass.setUpClass = setUpClass
+            klass.tearDownClass = tearDownClass
+
+            return klass
+
+        return super(fake_time, self).__call__(decorable)
 
     # Freezegun compatibility.
     start = __enter__
