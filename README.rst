@@ -1,7 +1,25 @@
 python-libfaketime: fast date/time mocking
 ==========================================
 
+.. image:: https://img.shields.io/travis/simon-weber/python-libfaketime.svg
+        :target: https://travis-ci.org/simon-weber/python-libfaketime
+
+.. image:: https://img.shields.io/pypi/v/libfaketime.svg
+        :target: https://pypi.python.org/pypi/libfaketime
+
 python-libfaketime is a wrapper of `libfaketime <https://github.com/wolfcw/libfaketime>`__ for python.
+
+Installation
+------------
+
+Install with **pip**:
+
+.. code-block:: sh
+
+    $ pip install libfaketime
+
+Usage
+-----
 
 .. code-block:: python
 
@@ -21,10 +39,12 @@ python-libfaketime is a wrapper of `libfaketime <https://github.com/wolfcw/libfa
     @fake_time('2014-01-01 00:00:00')
     def test_get_tomorrow():
         assert get_tomorrow() == datetime.date(2014, 1, 2)
- 
+
 
 It serves as a fast drop-in replacement for `freezegun <https://github.com/spulec/freezegun>`__.
-Here's the output of a `totally unscientific benchmark <https://github.com/simon-weber/python-libfaketime/blob/master/benchmark.py>`__ on my laptop::
+Here's the output of a `totally unscientific benchmark <https://github.com/simon-weber/python-libfaketime/blob/master/benchmark.py>`__ on my laptop:
+
+.. code-block:: sh
 
     $ python benchmark.py
     re-exec with libfaketime dependencies
@@ -38,17 +58,18 @@ Here's the output of a `totally unscientific benchmark <https://github.com/simon
 
 Some brief details:
 
-* linux and osx, python 2/3
-* microsecond resolution
-* accepts datetimes and strings that can be parsed by dateutil
-* not threadsafe
-* will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler.
-        
+* Linux and OS X, Pythons 2 and 3
+* Microsecond resolution
+* Accepts datetimes and strings that can be parsed by dateutil
+* Not threadsafe
+* Will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler.
+
 
 To install: ``pip install libfaketime``.
 
 Use with py.test
-================
+----------------
+
 It's easiest to reexec from inside the pytest_configure hook:
 
 .. code-block:: python
@@ -61,17 +82,20 @@ It's easiest to reexec from inside the pytest_configure hook:
 
 
 How to avoid re-exec
-====================
+--------------------
 
 Sometimes, re-exec does unexpected things. You can avoid those problems by preloading libfaketime yourself. The environment variables you need
-can be found by running `python-libfaketime` on the command line::
+can be found by running `python-libfaketime` on the command line:
 
-    $ python-libfaketime 
+.. code-block:: sh
+
+    $ python-libfaketime
     export LD_PRELOAD="/home/foo/<snip>/vendor/libfaketime/src/libfaketime.so.1"
     export FAKETIME_DID_REEXEC=true
 
-You can use them as such::
+You can use them as such:
 
-    eval $(python-libfaketime)
-    nosetests  # ...or any other code that imports libfaketime
+.. code-block:: sh
 
+    $ eval $(python-libfaketime)
+    $ nosetests  # ...or any other code that imports libfaketime
