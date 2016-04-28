@@ -5,6 +5,7 @@ import datetime
 import os
 import sys
 import threading
+import uuid
 
 from contextdecorator import ContextDecorator
 import dateutil.parser
@@ -108,6 +109,11 @@ class fake_time(ContextDecorator):
     def _should_fake(self):
         return self.only_main_thread and threading.current_thread().name == 'MainThread'
 
+    def _should_patch_uuid(self):
+        return hasattr(uuid, '_uuid_generate_time') and \
+                not self._prev_spec and \
+                self._should_fake()
+
     def _format_datetime(self, _datetime):
         return _datetime.strftime('%Y-%m-%d %T %f')
 
@@ -120,9 +126,19 @@ class fake_time(ContextDecorator):
             begin_callback(self)
             self._prev_spec = os.environ.get('FAKETIME')
             os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
+
+        if self._should_patch_uuid():
+            # Bug fix for uuid1 deadlocks in system level uuid libraries
+            # PR: https://github.com/simon-weber/python-libfaketime/pull/14
+            self._backup_uuid_generate_time = uuid._uuid_generate_time
+            uuid._uuid_generate_time = None
+
         return self
 
     def __exit__(self, *exc):
+        if self._should_patch_uuid():
+            uuid._uuid_generate_time = self._backup_uuid_generate_time
+
         if self._should_fake():
             if self._prev_spec is not None:
                 os.environ['FAKETIME'] = self._prev_spec
