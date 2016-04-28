@@ -1,5 +1,6 @@
 import datetime
 from unittest import TestCase
+import uuid
 
 from mock import patch
 
@@ -64,3 +65,41 @@ class TestFaketime(TestCase):
             self.assertEqual(datetime.datetime.now(), datetime.datetime(2000, 1, 1))
 
         self._assert_time_not_faked()
+
+
+class TestUUID1Deadlock(TestCase):
+
+    @fake_time(datetime.datetime.now())
+    def test_uuid1_does_not_deadlock(self):
+        """This test will only deadlock on OSs that use the system level
+        uuid1 libraries.
+        """
+        for i in range(100):
+            uuid.uuid1()
+
+    @fake_time(datetime.datetime.now())
+    def test_uuid1_does_not_use_system_level_library(self):
+        self.assertIsNone(uuid._uuid_generate_time)
+
+    def test_faketime_returns_uuid1_library_state(self):
+        uuid_generate_time = "My System Level UUID1 Generator"
+        uuid._uuid_generate_time = uuid_generate_time
+
+        with fake_time(datetime.datetime.now()):
+            self.assertIsNone(uuid._uuid_generate_time)
+
+        self.assertEqual(uuid._uuid_generate_time, uuid_generate_time)
+
+    def test_nested_faketime_returns_uuid1_library_state(self):
+        uuid_generate_time = "My System Level UUID1 Generator"
+        uuid._uuid_generate_time = uuid_generate_time
+
+        with fake_time(datetime.datetime.now()):
+            self.assertIsNone(uuid._uuid_generate_time)
+
+            with fake_time(datetime.datetime.now()):
+                self.assertIsNone(uuid._uuid_generate_time)
+
+            self.assertIsNone(uuid._uuid_generate_time)
+
+        self.assertEqual(uuid._uuid_generate_time, uuid_generate_time)
