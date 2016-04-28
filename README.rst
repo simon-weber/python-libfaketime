@@ -43,7 +43,7 @@ Some brief details:
 * accepts datetimes and strings that can be parsed by dateutil
 * not threadsafe
 * will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler.
-        
+
 
 To install: ``pip install libfaketime``.
 
@@ -75,3 +75,10 @@ You can use them as such::
     eval $(python-libfaketime)
     nosetests  # ...or any other code that imports libfaketime
 
+Known Issues
+============
+
+It was found that calling `uuid.uuid1()` multiple times while in a fake_time context could result in a deadlock. This situation only occured for users with
+a system level uuid1 library. In order to combat this issue, python-libfaketime temporarily disables the system level library by patching
+`_uuid_generate_time to None <https://github.com/python/cpython/blob/a1786b287598baa4a9146c9938c9a667bd98fc00/Lib/uuid.py#L565-L570>`_ while in
+the fake_time context.
