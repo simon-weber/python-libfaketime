@@ -6,8 +6,12 @@ import os
 import sys
 import threading
 
-from contextdecorator import ContextDecorator
 import dateutil.parser
+
+try:
+    from contextlib import ContextDecorator
+except ImportError:
+    from contextdecorator import ContextDecorator
 
 try:
     basestring

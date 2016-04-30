@@ -70,9 +70,11 @@ setup(
     long_description=(open('README.rst').read() + '\n\n' +
                       open('CHANGELOG.rst').read()),
     install_requires=[
-        'contextdecorator',
         'python-dateutil >= 1.3, != 2.0',         # 2.0 is python3-only
     ],
+    extras_require={
+        ':python_version=="2.7"': ['contextdecorator'],
+    },
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Development Status :: 4 - Beta',
