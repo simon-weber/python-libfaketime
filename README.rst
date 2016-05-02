@@ -96,6 +96,7 @@ can be found by running `python-libfaketime` on the command line:
 You can use them as such:
 
 .. code-block:: sh
+
     $ eval $(python-libfaketime)
     $ nosetests  # ...or any other code that imports libfaketime
 
