@@ -5,6 +5,13 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+0.4.1
++++++
+released 2016-05-02
+
+- fix deadlocks from uuid.uuid1 when faking time: [#14](https://github.com/simon-weber/python-libfaketime/pull/14)
+- remove contextdecorator dependency on python3: [#15](https://github.com/simon-weber/python-libfaketime/pull/15)
+
 0.4.0
 +++++
 released 2016-04-02
