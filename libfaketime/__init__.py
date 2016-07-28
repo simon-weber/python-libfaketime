@@ -111,12 +111,12 @@ class fake_time(ContextDecorator):
         self.time_to_freeze = _datetime  # freezegun compatibility
 
     def _should_fake(self):
-        return self.only_main_thread and threading.current_thread().name == 'MainThread'
+        return not self.only_main_thread or threading.current_thread().name == 'MainThread'
 
     def _should_patch_uuid(self):
         return hasattr(uuid, '_uuid_generate_time') and \
-                not self._prev_spec and \
-                self._should_fake()
+               self._should_fake() and \
+               not self._prev_spec
 
     def _format_datetime(self, _datetime):
         return _datetime.strftime('%Y-%m-%d %T %f')
