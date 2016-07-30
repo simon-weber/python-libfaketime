@@ -8,8 +8,6 @@ python-libfaketime: fast date/time mocking
         :target: https://pypi.python.org/pypi/libfaketime
 
 python-libfaketime is a wrapper of `libfaketime <https://github.com/wolfcw/libfaketime>`__ for python.
-It serves as a fast drop-in replacement for `freezegun <https://github.com/spulec/freezegun>`__.
-
 
 Installation
 ------------
@@ -19,19 +17,6 @@ Install with **pip**:
 .. code-block:: sh
 
     $ pip install libfaketime
-
-
-Requirements
-------------
-
-Some brief details:
-
-* Works with Linux and OS X, Pythons 2 and 3.
-* Microsecond resolution.
-* Accepts datetimes and strings that can be parsed by dateutil.
-* Not threadsafe.
-* Breaks profiling. To workaround this, use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler.
-
 
 Usage
 -----
@@ -56,19 +41,7 @@ Usage
         assert get_tomorrow() == datetime.date(2014, 1, 2)
 
 
-By default, ``reexec_if_needed`` removes the ``LD_PRELOAD`` variable after the
-re-execution, to keep your environment as clean as possible. You might want it
-to stick around, for example when using parallelized tests that use subprocess
-like ``pytest-xdist``. To keep them around, pass ``remove_vars=False`` like:
-
-.. code-block:: python
-
-    reexec_if_needed(remove_vars=False)
-
-
-Benchmark against freezegun
----------------------------
-
+It serves as a fast drop-in replacement for `freezegun <https://github.com/spulec/freezegun>`__.
 Here's the output of a `totally unscientific benchmark <https://github.com/simon-weber/python-libfaketime/blob/master/benchmark.py>`__ on my laptop:
 
 .. code-block:: sh
@@ -81,6 +54,15 @@ Here's the output of a `totally unscientific benchmark <https://github.com/simon
     $ python benchmark.py freezegun
     timing 1000 executions of <function freeze_time at 0x10aaa1140>
     6.561472 seconds
+
+
+Some brief details:
+
+* Linux and OS X, Pythons 2 and 3
+* Microsecond resolution
+* Accepts datetimes and strings that can be parsed by dateutil
+* Not threadsafe
+* Will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler.
 
 
 Use with py.test
