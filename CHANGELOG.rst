@@ -5,6 +5,12 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+0.4.2
++++++
+released 2016-06-30
+
+- fix only_main_thread=False: [#24](https://github.com/simon-weber/python-libfaketime/pull/24)
+
 0.4.1
 +++++
 released 2016-05-02
