@@ -8,6 +8,7 @@ import threading
 import uuid
 
 import dateutil.parser
+import dateutil.tz
 
 try:
     from contextlib import ContextDecorator
@@ -155,3 +156,47 @@ class fake_time(ContextDecorator):
     # Freezegun compatibility.
     start = __enter__
     stop = __exit__
+
+
+class freeze_time(fake_time):
+    """
+    Freeze time honoring timezones. If no time zone is given, freeze_time will interpret the given
+    time spec as UTC. It's compatible with freezegun, so it can be used as a drop-in replacement for
+    freezegun's freeze_time.
+    """
+
+    def __init__(self, spec, tz_offset=None, **kwargs):
+        """Fake the time inside decorated function or within context manager
+
+        :param datetime|str spec: the time spec, e.g. "2012-01-14 03:21:34+01000"
+        :param int|None tz_offset: Offset the given time by this many hours
+        :param dict kwargs: any arguments fake_time might accept
+        """
+        dt = self._prepare(spec, tz_offset=tz_offset)
+        super(freeze_time, self).__init__(dt, **kwargs)
+
+    def _prepare(self, spec, tz_offset=None):
+        dt = spec if isinstance(spec, datetime.datetime) else dateutil.parser.parse(spec)
+
+        # If datetime currently has tzinfo, represent it as a datetime in UTC
+        utc = self._convert_to_utc(dt)
+
+        # If a tz_offset was given, subtract that also from the datetime
+        if tz_offset:
+            utc -= datetime.timedelta(hours=tz_offset)
+
+        # Convert the UTC datetime to the local timezone, and remove tzinfo,
+        # because the underlying libfaketime, which patches the system time,
+        # assumes local timezone and ignores timezone information
+        # See https://github.com/simon-weber/python-libfaketime/issues/1 (first issue ;)
+        # Maybe one day this will be fixed.
+
+        local = utc.astimezone(dateutil.tz.tzlocal())
+        return local.replace(tzinfo=None)
+
+    @staticmethod
+    def _convert_to_utc(dt):
+        if dt.tzinfo:
+            return dt.astimezone(dateutil.tz.tzutc())
+        else:
+            return dt.replace(tzinfo=dateutil.tz.tzutc())
