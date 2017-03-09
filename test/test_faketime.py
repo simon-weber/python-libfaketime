@@ -6,6 +6,7 @@ from mock import patch
 
 import libfaketime
 from libfaketime import fake_time
+from test import BaseFaketimeTest
 
 
 class TestReexec(TestCase):
@@ -15,7 +16,7 @@ class TestReexec(TestCase):
         self.assertRaises(RuntimeError, libfaketime.reexec_if_needed)
 
 
-class TestFaketime(TestCase):
+class TestFaketime(BaseFaketimeTest):
     def _assert_time_not_faked(self):
         # This just makes sure that non-faked time is dynamic;
         # I can't think of a good way to check that the non-faked time is "real".

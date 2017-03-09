@@ -9,6 +9,14 @@ python-libfaketime: fast date/time mocking
 
 python-libfaketime is a wrapper of `libfaketime <https://github.com/wolfcw/libfaketime>`__ for python.
 
+Some brief details:
+
+* Linux and OS X, Pythons 2 and 3
+* Microsecond resolution
+* Accepts datetimes and strings that can be parsed by dateutil
+* Not threadsafe
+* Will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler.
+
 Installation
 ------------
 
@@ -56,13 +64,31 @@ Here's the output of a `totally unscientific benchmark <https://github.com/simon
     6.561472 seconds
 
 
-Some brief details:
+Timezone-aware faking of time
+-----------------------------
 
-* Linux and OS X, Pythons 2 and 3
-* Microsecond resolution
-* Accepts datetimes and strings that can be parsed by dateutil
-* Not threadsafe
-* Will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler.
+Beware that if you want timezone-aware fake times, you must use `freeze_time` like so:
+
+.. code-block:: python
+
+    from datetime import timedelta, datetime
+    from libfaketime import reexec_if_needed, tzutc, freeze_time
+    reexec_if_needed()
+
+
+    def get_now():
+        return datetime.now(tz=tzutc())
+
+
+    @freeze_time('2014-01-01 12:00:00+1200')
+    def test_get_now1():
+        assert get_now() - datetime(2014, 1, 1, 0, 0, 0, tzinfo=tzutc()) == timedelta(0)
+
+
+    @freeze_time('2014-01-01 01:00:00')
+    def test_get_now2():
+        # freeze_time has interpreted this spec as UTC implicitly
+        assert get_now() - datetime(2014, 1, 1, 1, 0, 0, tzinfo=tzutc()) == timedelta(0)
 
 
 Use with py.test
