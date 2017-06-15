@@ -62,7 +62,7 @@ Some brief details:
 * Microsecond resolution
 * Accepts datetimes and strings that can be parsed by dateutil
 * Not threadsafe
-* Will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler.
+* Will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler (`nosetest example <https://gist.github.com/simon-weber/8d43e33448684f85718417ce1a072bc8>`__).
 
 
 Use with py.test
