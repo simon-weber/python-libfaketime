@@ -5,3 +5,8 @@ include libfaketime/vendor/libfaketime/src/Makefile
 include libfaketime/vendor/libfaketime/src/Makefile.OSX
 include libfaketime/vendor/libfaketime/COPYING
 recursive-include libfaketime/vendor/libfaketime/src *.c *.h *.map
+include libfaketime/vendor/libfaketime-pre_sierra/Makefile
+include libfaketime/vendor/libfaketime-pre_sierra/src/Makefile
+include libfaketime/vendor/libfaketime-pre_sierra/src/Makefile.OSX
+include libfaketime/vendor/libfaketime-pre_sierra/COPYING
+recursive-include libfaketime/vendor/libfaketime-pre_sierra/src *.c *.h *.map

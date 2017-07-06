@@ -2,12 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import os
+import platform
 import re
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 import subprocess
 import sys
 
+
+# libfaketime broke compatibility with osx before sierra.
+# We keep a separate submodule for each and choose between them dynamically.
+SIERRA_VERSION_TUPLE = (10, 12)
 
 # This hack is from http://stackoverflow.com/a/7071358/1231454;
 # the version is kept in a seperate file and gets parsed - this
@@ -29,6 +34,14 @@ if sys.platform == "linux" or sys.platform == "linux2":
     libname = 'libfaketime.so.1'
 elif sys.platform == "darwin":
     libname = 'libfaketime.1.dylib'
+
+    version_tuple = tuple(int(x) for x in platform.mac_ver()[0].split('.'))
+    pre_sierra = version_tuple < SIERRA_VERSION_TUPLE
+    if pre_sierra:
+        _vendor_path = 'libfaketime/vendor/libfaketime-pre_sierra'
+
+    print("OSX version is %s-sierra: %r" % ('pre' if pre_sierra else 'post', version_tuple))
+
 else:
     raise RuntimeError("libfaketime does not support platform %s" % sys.platform)
 

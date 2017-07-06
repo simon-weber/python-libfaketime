@@ -3,6 +3,7 @@ from __future__ import print_function
 from copy import deepcopy
 import datetime
 import os
+import platform
 import sys
 import threading
 import uuid
@@ -19,6 +20,9 @@ try:
 except NameError:
     basestring = (str, bytes)
 
+
+SIERRA_VERSION_TUPLE = (10, 12)
+
 # When using reexec_if_needed, remove_vars=True and a test loader that purges sys.modules
 # (like nose), it can be tough to run reexec_if_needed only once.
 # This env var is set by reexec to ensure we don't reload more than once.
@@ -27,9 +31,17 @@ _DID_REEXEC_VAR = 'FAKETIME_DID_REEXEC'
 
 
 def _get_shared_lib(basename):
+    vendor_dir = 'libfaketime'
+
+    if sys.platform == "darwin":
+        version_tuple = tuple(int(x) for x in platform.mac_ver()[0].split('.'))
+        pre_sierra = version_tuple < SIERRA_VERSION_TUPLE
+        if pre_sierra:
+            vendor_dir = 'libfaketime-pre_sierra'
+
     return os.path.join(
         os.path.dirname(__file__),
-        os.path.join('vendor', 'libfaketime', 'src'),
+        os.path.join('vendor', vendor_dir, 'src'),
         basename)
 
 # keys are the first 5 chars since we don't care about the version.
@@ -49,9 +61,9 @@ _other_additions = {
 }
 
 _env_additions = deepcopy(_lib_addition)
-for platform, d in list(_other_additions.items()):
+for platform_name, d in list(_other_additions.items()):
     # Just doing a .update wouldn't merge the sub dictionaries.
-    _env_additions[platform].update(d)
+    _env_additions[platform_name].update(d)
 
 
 def get_reload_information():
