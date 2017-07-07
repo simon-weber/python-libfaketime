@@ -5,6 +5,12 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+0.4.3
++++++
+released 2016-07-07
+
+- add macOS Sierra compatibility: `\#29 <https://github.com/simon-weber/python-libfaketime/pull/29>`__
+
 0.4.2
 +++++
 released 2016-06-30
