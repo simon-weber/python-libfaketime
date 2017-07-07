@@ -9,14 +9,14 @@ Changelog
 +++++
 released 2016-06-30
 
-- fix only_main_thread=False: `#24 <https://github.com/simon-weber/python-libfaketime/pull/24>`__
+- fix only_main_thread=False: `\#24 <https://github.com/simon-weber/python-libfaketime/pull/24>`__
 
 0.4.1
 +++++
 released 2016-05-02
 
-- fix deadlocks from uuid.uuid1 when faking time: `#14 <https://github.com/simon-weber/python-libfaketime/pull/14>`__
-- remove contextdecorator dependency on python3: `#15 <https://github.com/simon-weber/python-libfaketime/pull/15>`__
+- fix deadlocks from uuid.uuid1 when faking time: `\#14 <https://github.com/simon-weber/python-libfaketime/pull/14>`__
+- remove contextdecorator dependency on python3: `\#15 <https://github.com/simon-weber/python-libfaketime/pull/15>`__
 
 0.4.0
 +++++
