@@ -13,7 +13,11 @@ import dateutil.parser
 try:
     from contextlib import ContextDecorator
 except ImportError:
-    from contextdecorator import ContextDecorator
+    # Python 2 support
+    try:
+        from contextlib2 import ContextDecorator
+    except ImportError:
+        from contextdecorator import ContextDecorator
 
 try:
     basestring
