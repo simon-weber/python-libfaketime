@@ -5,6 +5,12 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+0.4.4
++++++
+released 2017-07-16
+
+- allow contextlib2 as an alternative to contextdecorator: `\#30 <https://github.com/simon-weber/python-libfaketime/pull/30>`__
+
 0.4.3
 +++++
 released 2017-07-07
