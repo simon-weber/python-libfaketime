@@ -7,7 +7,7 @@ Changelog
 
 0.4.3
 +++++
-released 2016-07-07
+released 2017-07-07
 
 - add macOS Sierra compatibility: `\#29 <https://github.com/simon-weber/python-libfaketime/pull/29>`__
 
