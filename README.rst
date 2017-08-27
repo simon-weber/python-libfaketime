@@ -78,6 +78,13 @@ It's easiest to reexec from inside the pytest_configure hook:
     def pytest_configure():
         reexec_if_needed()
 
+Migration from freezegun
+------------------------
+
+.. code-block:: bash
+
+    find . -type f -name "*.py" -exec sed -i 's/freezegun/libfaketime/g' "{}" \;
+
 
 How to avoid re-exec
 --------------------

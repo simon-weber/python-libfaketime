@@ -5,7 +5,7 @@ import uuid
 from mock import patch
 
 import libfaketime
-from libfaketime import fake_time
+from libfaketime import fake_time, freeze_time
 
 
 class TestReexec(TestCase):
@@ -65,6 +65,10 @@ class TestFaketime(TestCase):
             self.assertEqual(datetime.datetime.now(), datetime.datetime(2000, 1, 1))
 
         self._assert_time_not_faked()
+
+    def test_freeze_time_alias(self):
+        with freeze_time('2000-01-01 10:00:05') as fake:
+            self.assertEqual(datetime.datetime.now(), datetime.datetime(2000, 1, 1, 10, 0, 5))
 
 
 class TestUUID1Deadlock(TestCase):
