@@ -58,7 +58,7 @@ Here's the output of a `totally unscientific benchmark <https://github.com/simon
 
 Some brief details:
 
-* Linux and OS X, Pythons 2 and 3
+* Linux and OS X, Pythons 2.7, 3.4, 3.5, 3.6
 * Microsecond resolution
 * Accepts datetimes and strings that can be parsed by dateutil
 * Not threadsafe
