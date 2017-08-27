@@ -1,5 +1,6 @@
 import datetime
 from unittest import TestCase
+import time
 import uuid
 
 from mock import patch
@@ -21,6 +22,7 @@ class TestFaketime(TestCase):
         # I can't think of a good way to check that the non-faked time is "real".
 
         first = datetime.datetime.now().microsecond
+        time.sleep(0.000001)
         second = datetime.datetime.now().microsecond
 
         self.assertGreater(second, first)
