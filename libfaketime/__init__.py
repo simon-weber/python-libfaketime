@@ -117,14 +117,15 @@ def end_callback(instance):
 
 
 class fake_time(ContextDecorator):
-    def __init__(self, datetime_spec, only_main_thread=True):
+    def __init__(self, datetime_spec, only_main_thread=True, tz_offset=0):
         self.only_main_thread = only_main_thread
 
         _datetime = datetime_spec
         if isinstance(datetime_spec, basestring):
             _datetime = dateutil.parser.parse(datetime_spec)
 
-        self.time_to_freeze = _datetime  # freezegun compatibility
+        self.time_to_freeze = _datetime + datetime.timedelta(hours=tz_offset) # freezegun compatibility
+        self.tz_offset = tz_offset
 
     def _should_fake(self):
         return not self.only_main_thread or threading.current_thread().name == 'MainThread'
@@ -145,6 +146,9 @@ class fake_time(ContextDecorator):
         if self._should_fake():
             begin_callback(self)
             self._prev_spec = os.environ.get('FAKETIME')
+            self._prev_tz = os.environ.get('TZ')
+
+            os.environ['TZ'] = "UTC{0:+}".format(-self.tz_offset)
             os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
 
         if self._should_patch_uuid():
@@ -160,6 +164,11 @@ class fake_time(ContextDecorator):
             uuid._uuid_generate_time = self._backup_uuid_generate_time
 
         if self._should_fake():
+            if self._prev_tz is not None:
+                os.environ['TZ'] = self._prev_tz
+            else:
+                del os.environ['TZ']
+
             if self._prev_spec is not None:
                 os.environ['FAKETIME'] = self._prev_spec
             else:

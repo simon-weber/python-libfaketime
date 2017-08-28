@@ -44,6 +44,17 @@ class TestFaketime(TestCase):
     @fake_time('2000-01-01 10:00:05')
     def test_fake_time_parses_easy_strings(self):
         self.assertEqual(datetime.datetime.now(), datetime.datetime(2000, 1, 1, 10, 0, 5))
+        self.assertEqual(datetime.datetime.utcnow(), datetime.datetime(2000, 1, 1, 10, 0, 5))
+
+    def test_fake_time_parses_easy_strings_with_timezones(self):
+        with fake_time('2000-01-01 10:00:05', tz_offset=3):
+            self.assertEqual(datetime.datetime.now(), datetime.datetime(2000, 1, 1, 13, 0, 5))
+            self.assertEqual(datetime.datetime.utcnow(), datetime.datetime(2000, 1, 1, 10, 0, 5))
+
+        with fake_time('2000-01-01 10:00:05', tz_offset=-3):
+            self.assertEqual(datetime.datetime.now(), datetime.datetime(2000, 1, 1, 7, 0, 5))
+            self.assertEqual(datetime.datetime.utcnow(), datetime.datetime(2000, 1, 1, 10, 0, 5))
+
 
     @fake_time('march 1st, 2014 at 1:59pm')
     def test_fake_time_parses_tough_strings(self):
