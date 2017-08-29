@@ -180,3 +180,5 @@ class fake_time(ContextDecorator):
     # Freezegun compatibility.
     start = __enter__
     stop = __exit__
+
+freeze_time = fake_time
