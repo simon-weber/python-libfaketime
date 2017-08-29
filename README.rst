@@ -103,7 +103,19 @@ You can use them as such:
 .. code-block:: sh
 
     $ eval $(python-libfaketime)
-    $ nosetests  # ...or any other code that imports libfaketime
+    $ pytest  # ...or any other code that imports libfaketime
+
+
+Contributing and testing
+------------------------
+
+Contributions are highly welcomed. You should compile libfaketime before running tests:
+
+```
+make -C libfaketime/vendor/libfaketime
+```
+
+Then you can use `pytest` and `tox` to run the tests.
 
 Known Issues
 ------------
