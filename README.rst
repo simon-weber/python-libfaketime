@@ -111,11 +111,11 @@ Contributing and testing
 
 Contributions are highly welcomed. You should compile libfaketime before running tests:
 
-```
-make -C libfaketime/vendor/libfaketime
-```
+.. code-block:: bash
 
-Then you can use `pytest` and `tox` to run the tests.
+    make -C libfaketime/vendor/libfaketime
+
+Then you can install requirements with ``pip install -r requirements.txt`` and use ``pytest`` and ``tox`` to run the tests.
 
 Known Issues
 ------------
