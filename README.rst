@@ -8,11 +8,18 @@ python-libfaketime: fast date/time mocking
         :target: https://pypi.python.org/pypi/libfaketime
 
 python-libfaketime is a wrapper of `libfaketime <https://github.com/wolfcw/libfaketime>`__ for python.
+Some brief details:
+
+* Linux and OS X, Pythons 2.7, 3.4, 3.5, 3.6.
+* Mostly compatible with `freezegun <https://github.com/spulec/freezegun>`__.
+* Microsecond resolution.
+* Accepts datetimes and strings that can be parsed by dateutil.
+* Not threadsafe.
+* Will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler (`nosetest example <https://gist.github.com/simon-weber/8d43e33448684f85718417ce1a072bc8>`__).
+
 
 Installation
 ------------
-
-Install with **pip**:
 
 .. code-block:: sh
 
@@ -24,7 +31,6 @@ Usage
 .. code-block:: python
 
     import datetime
-
     from libfaketime import fake_time, reexec_if_needed
 
     # libfaketime needs to be preloaded by the dynamic linker.
@@ -32,16 +38,32 @@ Usage
     # You can also skip this and manually manage your env (see "How to avoid re-exec").
     reexec_if_needed()
 
-    def get_tomorrow():
-        return datetime.date.today() + datetime.timedelta(days=1)
+    def test_datetime_now():
+
+        # fake_time can be used as a context_manager
+        with fake_time('1970-01-01 00:00:01'):
+
+            # Every calls to a date or datetime function returns the mocked date
+            assert datetime.datetime.utcnow() == datetime.datetime(1970, 1, 1, 0, 0, 1)
+            assert datetime.datetime.now() == datetime.datetime(1970, 1, 1, 0, 0, 1)
+            assert time.time() == 1
 
 
-    @fake_time('2014-01-01 00:00:00')
-    def test_get_tomorrow():
-        assert get_tomorrow() == datetime.date(2014, 1, 2)
+    # fake_time can also be used as a decorator
+    @fake_time('1970-01-01 00:00:01', tz_offset=12)
+    def test_datetime_now_with_offset():
+
+        # datetime.utcnow returns the mocked datetime without offset
+        assert datetime.datetime.utcnow() == datetime.datetime(1970, 1, 1, 0, 0, 1)
+
+        # datetime.now returns the mocked datetime with the offset passed to fake_time
+        assert datetime.datetime.now() == datetime.datetime(1970, 1, 1, 12, 0, 1)
 
 
-It serves as a fast drop-in replacement for `freezegun <https://github.com/spulec/freezegun>`__.
+Performances
+------------
+
+libfaketime serves as a fast drop-in replacement for `freezegun <https://github.com/spulec/freezegun>`__.
 Here's the output of a `totally unscientific benchmark <https://github.com/simon-weber/python-libfaketime/blob/master/benchmark.py>`__ on my laptop:
 
 .. code-block:: sh
@@ -56,27 +78,28 @@ Here's the output of a `totally unscientific benchmark <https://github.com/simon
     6.561472 seconds
 
 
-Some brief details:
-
-* Linux and OS X, Pythons 2.7, 3.4, 3.5, 3.6
-* Microsecond resolution
-* Accepts datetimes and strings that can be parsed by dateutil
-* Not threadsafe
-* Will break profiling. A workaround: use ``libfaketime.{begin, end}_callback`` to disable/enable your profiler (`nosetest example <https://gist.github.com/simon-weber/8d43e33448684f85718417ce1a072bc8>`__).
-
-
 Use with py.test
 ----------------
 
-It's easiest to reexec from inside the pytest_configure hook:
+The easiest way is to use the `pytest-libfaketime <https://github.com/azmeuk/pytest-libfaketime>`__ plugin. This way you wont have to edit your **conftest.py** or call **reexec_if_needed** yourself. Just plug and play.
+
+.. code-block:: sh
+
+    $ pip install pytest-libfaketime
+
+
+You can also reexec from inside the pytest_configure hook:
 
 .. code-block:: python
 
     # conftest.py
-    from libfaketime import reexec_if_needed
+    import os
+    import libfaketime
 
     def pytest_configure():
-        reexec_if_needed()
+        libfaketime.reexec_if_needed()
+        _, env_additions = libfaketime.get_reload_information()
+        os.environ.update(env_additions)
 
 Migration from freezegun
 ------------------------

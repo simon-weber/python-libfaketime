@@ -5,6 +5,13 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+0.5.0
++++++
+released 2017-09-05
+
+- freeze_time alias to fake_time `\#31 <https://github.com/simon-weber/python-libfaketime/pull/31>`__
+- fake_time tz_offset parameter `\#36 <https://github.com/simon-weber/python-libfaketime/pull/36>`__
+
 0.4.4
 +++++
 released 2017-07-16
