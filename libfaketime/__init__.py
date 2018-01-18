@@ -1,6 +1,9 @@
 from __future__ import print_function
 
 from copy import deepcopy
+import functools
+import unittest
+import inspect
 import datetime
 import os
 import platform
@@ -10,14 +13,6 @@ import uuid
 
 import dateutil.parser
 
-try:
-    from contextlib import ContextDecorator
-except ImportError:
-    # Python 2 support
-    try:
-        from contextlib2 import ContextDecorator
-    except ImportError:
-        from contextdecorator import ContextDecorator
 
 try:
     basestring
@@ -116,7 +111,7 @@ def end_callback(instance):
     pass
 
 
-class fake_time(ContextDecorator):
+class fake_time:
     def __init__(self, datetime_spec, only_main_thread=True, tz_offset=0):
         self.only_main_thread = only_main_thread
 
@@ -180,5 +175,73 @@ class fake_time(ContextDecorator):
     # Freezegun compatibility.
     start = __enter__
     stop = __exit__
+
+    # Decorator-style use support
+
+    def __call__(self, func):
+        if inspect.isclass(func):
+            return self.decorate_class(func)
+        return self.decorate_callable(func)
+
+    def decorate_class(self, klass):
+        if issubclass(klass, unittest.TestCase):
+            # If it's a TestCase, we assume you want to freeze the time for the
+            # tests, from setUpClass to tearDownClass
+
+            # Use getattr as in Python 2.6 they are optional
+            orig_setUpClass = getattr(klass, 'setUpClass', None)
+            orig_tearDownClass = getattr(klass, 'tearDownClass', None)
+
+            @classmethod
+            def setUpClass(cls):
+                self.start()
+                if orig_setUpClass is not None:
+                    orig_setUpClass()
+
+            @classmethod
+            def tearDownClass(cls):
+                if orig_tearDownClass is not None:
+                    orig_tearDownClass()
+                self.stop()
+
+            klass.setUpClass = setUpClass
+            klass.tearDownClass = tearDownClass
+
+            return klass
+
+        else:
+
+            seen = set()
+
+            klasses = klass.mro() if hasattr(klass, 'mro') else [klass] + list(klass.__bases__)
+            for base_klass in klasses:
+                for (attr, attr_value) in base_klass.__dict__.items():
+                    if attr.startswith('_') or attr in seen:
+                        continue
+                    seen.add(attr)
+
+                    if not callable(attr_value) or inspect.isclass(attr_value):
+                        continue
+
+                    try:
+                        setattr(klass, attr, self(attr_value))
+                    except (AttributeError, TypeError):
+                        # Sometimes we can't set this for built-in types and custom callables
+                        continue
+            return klass
+
+    def decorate_callable(self, func):
+        def wrapper(*args, **kwargs):
+            with self:
+                result = func(*args, **kwargs)
+            return result
+        functools.update_wrapper(wrapper, func)
+
+        # update_wrapper already sets __wrapped__ in Python 3.2+, this is only
+        # needed for Python 2.x support
+        wrapper.__wrapped__ = func
+
+        return wrapper
+
 
 freeze_time = fake_time
