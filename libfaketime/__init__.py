@@ -1,17 +1,16 @@
 from __future__ import print_function
 
 from copy import deepcopy
-import functools
-import unittest
-import inspect
 import datetime
+import dateutil.parser
+import functools
+import inspect
 import os
 import platform
 import sys
 import threading
+import unittest
 import uuid
-
-import dateutil.parser
 
 
 try:
@@ -176,7 +175,8 @@ class fake_time:
     start = __enter__
     stop = __exit__
 
-    # Decorator-style use support
+    # Decorator-style use support (shamelessly taken from freezegun, see
+    # https://github.com/spulec/freezegun/blob/7ad16a5579b28fc939a69cc04f0e99ba5e87b206/freezegun/api.py#L323)
 
     def __call__(self, func):
         if inspect.isclass(func):
