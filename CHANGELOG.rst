@@ -5,6 +5,12 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+0.5.1
++++++
+released 2018-01-19
+
+- fix usage as a class decorator : `\#41 <https://github.com/simon-weber/python-libfaketime/pull/41>`__
+
 0.5.0
 +++++
 released 2017-09-10
