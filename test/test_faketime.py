@@ -120,3 +120,14 @@ class TestUUID1Deadlock():
             assert uuid._uuid_generate_time is None
 
         assert uuid_generate_time == uuid._uuid_generate_time
+
+
+@fake_time('2000-01-01')
+class TestClassDecorator:
+
+    def test_simple(self):
+        assert datetime.datetime(2000, 1, 1) == datetime.datetime.now()
+
+    @fake_time('2001-01-01')
+    def test_overwrite_with_func_decorator(self):
+        assert datetime.datetime(2001, 1, 1) == datetime.datetime.now()
