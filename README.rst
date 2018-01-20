@@ -60,10 +60,10 @@ Usage
         assert datetime.datetime.now() == datetime.datetime(1970, 1, 1, 12, 0, 1)
 
 
-Performances
-------------
+Performance
+-----------
 
-libfaketime serves as a fast drop-in replacement for `freezegun <https://github.com/spulec/freezegun>`__.
+libfaketime tends to be significantly faster than `freezegun <https://github.com/spulec/freezegun>`__.
 Here's the output of a `totally unscientific benchmark <https://github.com/simon-weber/python-libfaketime/blob/master/benchmark.py>`__ on my laptop:
 
 .. code-block:: sh
@@ -81,14 +81,14 @@ Here's the output of a `totally unscientific benchmark <https://github.com/simon
 Use with py.test
 ----------------
 
-The easiest way is to use the `pytest-libfaketime <https://github.com/azmeuk/pytest-libfaketime>`__ plugin. This way you wont have to edit your **conftest.py** or call **reexec_if_needed** yourself. Just plug and play.
+The `pytest-libfaketime <https://github.com/azmeuk/pytest-libfaketime>`__ plugin will automatically configure python-libfaketime for you:
 
 .. code-block:: sh
 
     $ pip install pytest-libfaketime
 
 
-You can also reexec from inside the pytest_configure hook:
+Alternatively, you can reexec manually from inside the pytest_configure hook:
 
 .. code-block:: python
 
@@ -104,6 +104,8 @@ You can also reexec from inside the pytest_configure hook:
 Migration from freezegun
 ------------------------
 
+python-libfaketime should have the same behavior as freezegun when running on supported code. To migrate to it, you can run:
+
 .. code-block:: bash
 
     find . -type f -name "*.py" -exec sed -i 's/freezegun/libfaketime/g' "{}" \;
@@ -112,8 +114,7 @@ Migration from freezegun
 How to avoid re-exec
 --------------------
 
-Sometimes, re-exec does unexpected things. You can avoid those problems by preloading libfaketime yourself. The environment variables you need
-can be found by running `python-libfaketime` on the command line:
+In some cases - especially when your tests start other processes - re-execing can cause unexpected problems. To avoid this, you can preload the necessary environment variables yourself. The necessary environment for your system can be found by running ``python-libfaketime`` on the command line:
 
 .. code-block:: sh
 
@@ -121,7 +122,7 @@ can be found by running `python-libfaketime` on the command line:
     export LD_PRELOAD="/home/foo/<snip>/vendor/libfaketime/src/libfaketime.so.1"
     export FAKETIME_DID_REEXEC=true
 
-You can use them as such:
+You can easily put this in a script like:
 
 .. code-block:: sh
 
@@ -132,7 +133,7 @@ You can use them as such:
 Contributing and testing
 ------------------------
 
-Contributions are highly welcomed. You should compile libfaketime before running tests:
+Contributions are welcome! You should compile libfaketime before running tests:
 
 .. code-block:: bash
 
@@ -143,7 +144,7 @@ Then you can install requirements with ``pip install -r requirements.txt`` and u
 Known Issues
 ------------
 
-It was found that calling `uuid.uuid1()` multiple times while in a fake_time context could result in a deadlock. This situation only occured for users with
+It was found that calling ``uuid.uuid1()`` multiple times while in a fake_time context could result in a deadlock. This situation only occured for users with
 a system level uuid1 library. In order to combat this issue, python-libfaketime temporarily disables the system level library by patching
 `_uuid_generate_time to None <https://github.com/python/cpython/blob/a1786b287598baa4a9146c9938c9a667bd98fc00/Lib/uuid.py#L565-L570>`_ while in
 the fake_time context.
