@@ -5,6 +5,13 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+0.5.2
++++++
+released 2018-05-19
+
+- fix a bug causing incorrect times after unpatching under python 3.6+: `\#43 <https://github.com/simon-weber/python-libfaketime/pull/43>`__
+- fix compilation under gcc8: `\#44 <https://github.com/simon-weber/python-libfaketime/pull/44>`__
+
 0.5.1
 +++++
 released 2018-01-19
