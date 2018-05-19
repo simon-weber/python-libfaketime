@@ -9,6 +9,7 @@ import os
 import platform
 import sys
 import threading
+import time
 import unittest
 import uuid
 
@@ -143,6 +144,7 @@ class fake_time:
             self._prev_tz = os.environ.get('TZ')
 
             os.environ['TZ'] = "UTC{0:+}".format(-self.tz_offset)
+            time.tzset()
             os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
 
         if self._should_patch_uuid():
@@ -162,6 +164,7 @@ class fake_time:
                 os.environ['TZ'] = self._prev_tz
             else:
                 del os.environ['TZ']
+            time.tzset()
 
             if self._prev_spec is not None:
                 os.environ['FAKETIME'] = self._prev_spec
