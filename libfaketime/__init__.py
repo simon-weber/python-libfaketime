@@ -143,7 +143,7 @@ class fake_time:
             self._prev_spec = os.environ.get('FAKETIME')
             self._prev_tz = os.environ.get('TZ')
 
-            os.environ['TZ'] = "UTC{0:+}".format(-self.tz_offset)
+            os.environ['TZ'] = "Etc/GMT{0:+}".format(-self.tz_offset)
             time.tzset()
             os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
 
