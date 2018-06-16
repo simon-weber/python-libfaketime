@@ -43,6 +43,7 @@ def _get_shared_lib(basename):
         os.path.join('vendor', vendor_dir, 'src'),
         basename)
 
+
 # keys are the first 5 chars since we don't care about the version.
 _lib_addition = {
     'linux': {
@@ -119,7 +120,7 @@ class fake_time:
         if isinstance(datetime_spec, basestring):
             _datetime = dateutil.parser.parse(datetime_spec)
 
-        self.time_to_freeze = _datetime + datetime.timedelta(hours=tz_offset) # freezegun compatibility
+        self.time_to_freeze = _datetime + datetime.timedelta(hours=tz_offset)  # freezegun compatibility
         self.tz_offset = tz_offset
 
     def _should_fake(self):

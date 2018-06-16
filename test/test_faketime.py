@@ -1,9 +1,10 @@
 import datetime
 import time
+import os
 import uuid
-import pytest
 
 from mock import patch
+import pytest
 
 import libfaketime
 from libfaketime import fake_time, freeze_time
@@ -80,7 +81,7 @@ class TestFaketime():
         self._assert_time_not_faked()
 
     def test_freeze_time_alias(self):
-        with freeze_time('2000-01-01 10:00:05') as fake:
+        with freeze_time('2000-01-01 10:00:05'):
             assert datetime.datetime(2000, 1, 1, 10, 0, 5) == datetime.datetime.now()
 
 
