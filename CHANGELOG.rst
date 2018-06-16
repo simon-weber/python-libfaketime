@@ -5,6 +5,13 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+1.0.0
++++++
+released 2018-06-16
+
+- **backwards incompatible**: the monotonic clock is no longer mocked: `\#45 <https://github.com/simon-weber/python-libfaketime/pull/45>`__
+- ensure TZ is set to a valid timezone: `\#46 <https://github.com/simon-weber/python-libfaketime/pull/46>`__
+
 0.5.2
 +++++
 released 2018-05-19
