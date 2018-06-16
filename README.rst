@@ -120,6 +120,7 @@ In some cases - especially when your tests start other processes - re-execing ca
 
     $ python-libfaketime
     export LD_PRELOAD="/home/foo/<snip>/vendor/libfaketime/src/libfaketime.so.1"
+    export DONT_FAKE_MONOTONIC="1"
     export FAKETIME_DID_REEXEC=true
 
 You can easily put this in a script like:
