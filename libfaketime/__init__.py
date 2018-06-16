@@ -55,7 +55,11 @@ _lib_addition = {
 }
 
 _other_additions = {
+    'linux': {
+        'DONT_FAKE_MONOTONIC': '1',
+    },
     'darwi': {
+        'DONT_FAKE_MONOTONIC': '1',
         'DYLD_FORCE_FLAT_NAMESPACE': '1',
     },
 }

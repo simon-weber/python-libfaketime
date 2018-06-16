@@ -84,6 +84,9 @@ class TestFaketime():
         with freeze_time('2000-01-01 10:00:05'):
             assert datetime.datetime(2000, 1, 1, 10, 0, 5) == datetime.datetime.now()
 
+    def test_monotonic_not_mocked(self):
+        assert os.environ['DONT_FAKE_MONOTONIC'] == '1'
+
 
 class TestUUID1Deadlock():
 
