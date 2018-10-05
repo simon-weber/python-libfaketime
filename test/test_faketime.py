@@ -131,6 +131,8 @@ class TestClassDecorator:
 
     def test_simple(self):
         assert datetime.datetime(2000, 1, 1) == datetime.datetime.now()
+        self._faked_time.tick()
+        assert datetime.datetime(2000, 1, 1, 0, 0, 1) == datetime.datetime.now()
 
     @fake_time('2001-01-01')
     def test_overwrite_with_func_decorator(self):

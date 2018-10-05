@@ -215,8 +215,6 @@ class fake_time:
             klass.setUpClass = setUpClass
             klass.tearDownClass = tearDownClass
 
-            return klass
-
         else:
 
             seen = set()
@@ -236,7 +234,9 @@ class fake_time:
                     except (AttributeError, TypeError):
                         # Sometimes we can't set this for built-in types and custom callables
                         continue
-            return klass
+
+        klass._faked_time = self
+        return klass
 
     def decorate_callable(self, func):
         def wrapper(*args, **kwargs):
@@ -250,6 +250,5 @@ class fake_time:
         wrapper.__wrapped__ = func
 
         return wrapper
-
 
 freeze_time = fake_time

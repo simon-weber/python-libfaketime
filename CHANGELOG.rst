@@ -5,6 +5,11 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+1.0.1
++++++
+released xxxx-xx-xx
+- decorated objects can access the fake_time object with ``self._faked_time``
+
 1.0.0
 +++++
 released 2018-06-16
