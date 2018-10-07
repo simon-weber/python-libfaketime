@@ -5,10 +5,10 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
-1.0.1
+1.1.0
 +++++
-released xxxx-xx-xx
-- decorated objects can access the fake_time object with ``self._faked_time``
+released 2018-10-07
+- decorated classes can access the fake_time object with ``self._faked_time``: `\#47 <https://github.com/simon-weber/python-libfaketime/pull/47>`__
 
 1.0.0
 +++++
