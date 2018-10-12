@@ -13,6 +13,7 @@ import time
 import unittest
 import uuid
 
+from pytz import utc, timezone
 
 try:
     basestring
@@ -117,15 +118,21 @@ def end_callback(instance):
 
 
 class fake_time:
-    def __init__(self, datetime_spec, only_main_thread=True, tz_offset=0):
+    def __init__(self, datetime_spec, only_main_thread=True, tz_offset=None):
         self.only_main_thread = only_main_thread
+        self.timezone_str = 'UTC'
+        if tz_offset is not None:
+            self.timezone_str = 'Etc/GMT{0:+}'.format(-tz_offset)
 
-        _datetime = datetime_spec
+        self.time_to_freeze = datetime_spec
         if isinstance(datetime_spec, basestring):
-            _datetime = dateutil.parser.parse(datetime_spec)
-
-        self.time_to_freeze = _datetime + datetime.timedelta(hours=tz_offset)  # freezegun compatibility
-        self.tz_offset = tz_offset
+            self.time_to_freeze = utc.localize(dateutil.parser.parse(datetime_spec)) \
+                .astimezone(timezone(self.timezone_str))
+        elif isinstance(datetime_spec, datetime.datetime):
+            if datetime_spec.tzinfo:
+                if tz_offset is not None:
+                    raise Exception('Cannot set tz_offset when datetime already has timezone')
+                self.timezone_str = datetime_spec.tzinfo.zone
 
     def _should_fake(self):
         return not self.only_main_thread or threading.current_thread().name == 'MainThread'
@@ -148,7 +155,8 @@ class fake_time:
             self._prev_spec = os.environ.get('FAKETIME')
             self._prev_tz = os.environ.get('TZ')
 
-            os.environ['TZ'] = "Etc/GMT{0:+}".format(-self.tz_offset)
+            os.environ['TZ'] = self.timezone_str
+
             time.tzset()
             os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
 

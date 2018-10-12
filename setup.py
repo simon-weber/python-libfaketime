@@ -84,6 +84,7 @@ setup(
                       open('CHANGELOG.rst').read()),
     install_requires=[
         'python-dateutil >= 1.3, != 2.0',         # 2.0 is python3-only
+        'pytz',                                   # for pytz.timezone and pytz.utc
     ],
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
