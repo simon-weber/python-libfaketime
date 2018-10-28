@@ -5,6 +5,12 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+1.2.0
++++++
+released 2018-10-28
+- offset-aware datetimes now properly fake the timezone as well: `\#49 <https://github.com/simon-weber/python-libfaketime/pull/49>`__
+
+
 1.1.0
 +++++
 released 2018-10-07
