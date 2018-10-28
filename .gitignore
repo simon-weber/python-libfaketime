@@ -54,3 +54,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# IntelliJ/PyCharm IDE config
+/.idea
