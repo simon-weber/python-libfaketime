@@ -82,7 +82,7 @@ Here's the output of a `totally unscientific benchmark <https://github.com/simon
 Use with py.test
 ----------------
 
-The `pytest-libfaketime <https://github.com/azmeuk/pytest-libfaketime>`__ plugin will automatically configure python-libfaketime for you:
+The `pytest-libfaketime <https://gitlab.com/yaal/pytest-libfaketime>`__ plugin will automatically configure python-libfaketime for you:
 
 .. code-block:: sh
 
