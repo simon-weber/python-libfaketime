@@ -11,7 +11,7 @@ python-libfaketime: fast date/time mocking
 python-libfaketime is a wrapper of `libfaketime <https://github.com/wolfcw/libfaketime>`__ for python.
 Some brief details:
 
-* Linux and OS X, Pythons 2.7, 3.4, 3.5, 3.6.
+* Linux and OS X, Pythons 2.7 and 3.4 through 3.7
 * Mostly compatible with `freezegun <https://github.com/spulec/freezegun>`__.
 * Microsecond resolution.
 * Accepts datetimes and strings that can be parsed by dateutil.
@@ -143,10 +143,9 @@ Contributions are welcome! You should compile libfaketime before running tests:
 
 Then you can install requirements with ``pip install -r requirements.txt`` and use ``pytest`` and ``tox`` to run the tests.
 
-Known Issues
-------------
+uuid1 deadlock
+--------------
 
-It was found that calling ``uuid.uuid1()`` multiple times while in a fake_time context could result in a deadlock. This situation only occured for users with
-a system level uuid1 library. In order to combat this issue, python-libfaketime temporarily disables the system level library by patching
-`_uuid_generate_time to None <https://github.com/python/cpython/blob/a1786b287598baa4a9146c9938c9a667bd98fc00/Lib/uuid.py#L565-L570>`_ while in
-the fake_time context.
+Calling ``uuid.uuid1()`` multiple times while in a fake_time context can result in a deadlock when an OS-level uuid library is available.
+To avoid this, python-libtaketime will monkeypatch uuid._uuid_generate_time (or similar, it varies by version) to None inside a fake_time context.
+This may slow down uuid1 generation but should not affect correctness.

@@ -92,38 +92,9 @@ class TestUUID1Deadlock():
 
     @fake_time(datetime.datetime.now())
     def test_uuid1_does_not_deadlock(self):
-        """This test will only deadlock on OSs that use the system level
-        uuid1 libraries.
-        """
+        """This test will deadlock if we fail to patch a system level uuid library."""
         for i in range(100):
             uuid.uuid1()
-
-    @fake_time(datetime.datetime.now())
-    def test_uuid1_does_not_use_system_level_library(self):
-        assert uuid._uuid_generate_time is None
-
-    def test_faketime_returns_uuid1_library_state(self):
-        uuid_generate_time = "My System Level UUID1 Generator"
-        uuid._uuid_generate_time = uuid_generate_time
-
-        with fake_time(datetime.datetime.now()):
-            assert uuid._uuid_generate_time is None
-
-        assert uuid_generate_time == uuid._uuid_generate_time
-
-    def test_nested_faketime_returns_uuid1_library_state(self):
-        uuid_generate_time = "My System Level UUID1 Generator"
-        uuid._uuid_generate_time = uuid_generate_time
-
-        with fake_time(datetime.datetime.now()):
-            assert uuid._uuid_generate_time is None
-
-            with fake_time(datetime.datetime.now()):
-                assert uuid._uuid_generate_time is None
-
-            assert uuid._uuid_generate_time is None
-
-        assert uuid_generate_time == uuid._uuid_generate_time
 
 
 @fake_time('2000-01-01')

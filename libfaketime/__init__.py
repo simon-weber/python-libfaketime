@@ -137,10 +137,21 @@ class fake_time:
     def _should_fake(self):
         return not self.only_main_thread or threading.current_thread().name == 'MainThread'
 
+    _uuid_func_names = (
+        # < 3.7
+        '_uuid_generate_time',
+        # 3.7+
+        '_generate_time_safe', '_generate_time')
+
     def _should_patch_uuid(self):
-        return hasattr(uuid, '_uuid_generate_time') and \
-               self._should_fake() and \
-               not self._prev_spec
+        # Return the name of the uuid time generate function, or None if not present.
+        # This must be patched to avoid uuid1 deadlocks in OS uuid libraries.
+        if self._should_fake() and not self._prev_spec:
+            for func_name in self._uuid_func_names:
+                if hasattr(uuid, func_name):
+                    return func_name
+
+        return None
 
     def _format_datetime(self, _datetime):
         return _datetime.strftime('%Y-%m-%d %T %f')
@@ -160,17 +171,17 @@ class fake_time:
             time.tzset()
             os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
 
-        if self._should_patch_uuid():
-            # Bug fix for uuid1 deadlocks in system level uuid libraries
-            # PR: https://github.com/simon-weber/python-libfaketime/pull/14
-            self._backup_uuid_generate_time = uuid._uuid_generate_time
-            uuid._uuid_generate_time = None
+        func_name = self._should_patch_uuid()
+        if func_name:
+            self._backup_uuid_generate_time = getattr(uuid, func_name)
+            setattr(uuid, func_name, None)
 
         return self
 
     def __exit__(self, *exc):
-        if self._should_patch_uuid():
-            uuid._uuid_generate_time = self._backup_uuid_generate_time
+        func_name = self._should_patch_uuid()
+        if func_name:
+            setattr(uuid, func_name, self._backup_uuid_generate_time)
 
         if self._should_fake():
             if self._prev_tz is not None:
@@ -258,5 +269,6 @@ class fake_time:
         wrapper.__wrapped__ = func
 
         return wrapper
+
 
 freeze_time = fake_time
