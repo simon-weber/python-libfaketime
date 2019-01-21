@@ -5,15 +5,22 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+1.2.1
++++++
+released 2019-01-20
+
+- fix a deadlock on python 3.7+
+
 1.2.0
 +++++
 released 2018-10-28
-- offset-aware datetimes now properly fake the timezone as well: `\#49 <https://github.com/simon-weber/python-libfaketime/pull/49>`__
 
+- offset-aware datetimes now properly fake the timezone as well: `\#49 <https://github.com/simon-weber/python-libfaketime/pull/49>`__
 
 1.1.0
 +++++
 released 2018-10-07
+
 - decorated classes can access the fake_time object with ``self._faked_time``: `\#47 <https://github.com/simon-weber/python-libfaketime/pull/47>`__
 
 1.0.0
