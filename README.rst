@@ -102,6 +102,20 @@ Alternatively, you can reexec manually from inside the pytest_configure hook:
         _, env_additions = libfaketime.get_reload_information()
         os.environ.update(env_additions)
 
+
+Use with tox
+------------
+
+In your tox configuration file, under the ``testenv`` bloc, add the libfaketime environment variables to avoid re-execution:
+
+.. code-block:: configuration
+
+    setenv =
+        LD_PRELOAD = {envsitepackagesdir}/libfaketime/vendor/libfaketime/src/libfaketime.so.1
+        DONT_FAKE_MONOTONIC = 1
+        FAKETIME_DID_REEXEC = true
+
+
 Migration from freezegun
 ------------------------
 
