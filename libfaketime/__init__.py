@@ -30,7 +30,7 @@ SIERRA_VERSION_TUPLE = (10, 12)
 _DID_REEXEC_VAR = 'FAKETIME_DID_REEXEC'
 
 
-def _get_shared_lib(basename):
+def _get_lib_path():
     vendor_dir = 'libfaketime'
 
     if sys.platform == "darwin":
@@ -41,14 +41,27 @@ def _get_shared_lib(basename):
 
     return os.path.join(
         os.path.dirname(__file__),
-        os.path.join('vendor', vendor_dir, 'src'),
-        basename)
+        os.path.join('vendor', vendor_dir, 'src'))
+
+
+def _get_shared_lib(basename):
+    return os.path.join(_get_lib_path(), basename)
+
+
+def _setup_ld_preload(soname):
+    if 'LD_PRELOAD' in os.environ:
+        preload = '{}:{}'.format(soname, os.environ['LD_PRELOAD'])
+    else:
+        preload = soname
+
+    return preload
 
 
 # keys are the first 5 chars since we don't care about the version.
 _lib_addition = {
     'linux': {
-        'LD_PRELOAD': _get_shared_lib('libfaketime.so.1')
+        'LD_LIBRARY_PATH': _get_lib_path(),
+        'LD_PRELOAD': _setup_ld_preload('libfaketime.so.1')
     },
     'darwi': {
         'DYLD_INSERT_LIBRARIES': _get_shared_lib('libfaketime.1.dylib'),
