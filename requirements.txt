@@ -1,6 +1,6 @@
 contextdecorator==0.10.0
 filelock==3.0.10
-freezegun==0.3.11
+freezegun==0.3.13
 mock==2.0.0
 pbr==4.0.2
 pluggy==0.8.1
