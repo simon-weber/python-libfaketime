@@ -145,7 +145,7 @@ class fake_time:
             if datetime_spec.tzinfo:
                 if tz_offset is not None:
                     raise Exception('Cannot set tz_offset when datetime already has timezone')
-                self.timezone_str = datetime_spec.tzinfo.zone
+                self.timezone_str = datetime_spec.tzinfo.tzname(datetime_spec)
 
     def _should_fake(self):
         return not self.only_main_thread or threading.current_thread().name == 'MainThread'

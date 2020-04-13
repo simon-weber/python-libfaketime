@@ -1,4 +1,5 @@
 import datetime
+import dateutil.tz
 import os
 
 import pytest
@@ -53,3 +54,13 @@ def test_generated_tz_is_valid(offset):
     with fake_time(now, tz_offset=offset):
         fake_tz = os.environ['TZ']
         timezone(fake_tz)  # should not raise pytzdata.exceptions.TimezoneNotFound
+
+
+def test_dateutil_tz_is_valid():
+    test_dt = datetime.datetime(2017, 1, 2, 15, 2)
+    dateutil_tzinfo = dateutil.tz.gettz('UTC')
+    dt_dateutil_tzinfo = test_dt.replace(tzinfo=dateutil_tzinfo)
+
+    # Should be compatible with a dateutil tzinfo object, not just pytz
+    with fake_time(dt_dateutil_tzinfo):
+        assert datetime.datetime.now(tz=dateutil_tzinfo) == dt_dateutil_tzinfo
