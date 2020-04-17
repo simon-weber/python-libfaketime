@@ -5,6 +5,14 @@ Changelog
 
 `Semantic versioning <http://semver.org/>`__ is used.
 
+2.0.0
++++++
+released 2020-04-17
+
+- breaking: drop python 2.7 support
+- set LD_LIBRARY_PATH on linux to support paths containing spaces: `\#57 <https://github.com/simon-weber/python-libfaketime/pull/57>`__
+- fix compatibility with non-pytz tzinfo objects: `\#58 <https://github.com/simon-weber/python-libfaketime/pull/58>`__
+
 1.2.1
 +++++
 released 2019-01-20
