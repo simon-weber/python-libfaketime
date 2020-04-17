@@ -108,7 +108,7 @@ Use with tox
 
 In your tox configuration file, under the ``testenv`` bloc, add the libfaketime environment variables to avoid re-execution:
 
-.. code-block:: configuration
+.. code-block::
 
     setenv =
         LD_PRELOAD = {envsitepackagesdir}/libfaketime/vendor/libfaketime/src/libfaketime.so.1
