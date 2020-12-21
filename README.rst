@@ -5,8 +5,8 @@ python-libfaketime: fast date/time mocking
         :target: https://travis-ci.org/simon-weber/python-libfaketime
 .. image:: https://img.shields.io/pypi/v/libfaketime.svg
         :target: https://pypi.python.org/pypi/libfaketime
-.. image:: https://img.shields.io/badge/dynamic/json.svg?label=release&query=%24.status&maxAge=43200&uri=https%3A%2F%2Fwww.repominder.com%2Fbadge%2FeyJ1c2VyX2lkIjogMiwgInJlcG9faWQiOiA3OX0%3D%2F&link=https%3A%2F%2Fwww.repominder.com%2F
-        :target: https://www.repominder.com
+.. image:: https://img.shields.io/badge/dynamic/json.svg?label=release&query=%24.status&maxAge=43200&uri=https%3A%2F%2Fwww.repominder.com%2Fbadge%2FeyJmdWxsX25hbWUiOiAic2ltb24td2ViZXIvcHl0aG9uLWxpYmZha2V0aW1lIn0%3D%2F&link=https%3A%2F%2Fwww.repominder.com%2F   
+    :target: https://www.repominder.com
 
 python-libfaketime is a wrapper of `libfaketime <https://github.com/wolfcw/libfaketime>`__ for python.
 Some brief details:
