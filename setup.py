@@ -80,8 +80,9 @@ setup(
     scripts=[],
     license='GPLv2',
     description='A fast alternative to freezegun that wraps libfaketime.',
-    long_description=(open('README.rst').read() + '\n\n' +
-                      open('CHANGELOG.rst').read()),
+    long_description=(open('README.md').read() + '\n\n' +
+                      open('CHANGELOG.md').read()),
+    long_description_content_type='text/markdown',
     install_requires=[
         'python-dateutil >= 1.3, != 2.0',         # 2.0 is python3-only
         'pytz',                                   # for pytz.timezone and pytz.utc
