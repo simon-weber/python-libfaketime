@@ -57,6 +57,16 @@ def test_datetime_now_with_offset():
     assert datetime.datetime.now() == datetime.datetime(1970, 1, 1, 12, 0, 1)
 ```
 
+By default, ``reexec_if_needed`` removes the ``LD_PRELOAD`` variable after the
+re-execution, to keep your environment as clean as possible. You might want it
+to stick around, for example when using parallelized tests that use subprocess
+like ``pytest-xdist``, and simply for tests where subprocess is called. To
+keep them around, pass ``remove_vars=False`` like:
+
+```python
+    reexec_if_needed(remove_vars=False)
+```
+
 Performance
 -----------
 
