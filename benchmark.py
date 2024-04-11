@@ -8,14 +8,14 @@ from freezegun import freeze_time as freezegun_fake_time
 
 
 def sample(faker):
-    start = time.clock()
+    start = time.perf_counter()
 
     with faker(datetime.datetime.now()):
         datetime.datetime.now()
 
     datetime.datetime.now()
 
-    return time.clock() - start
+    return time.perf_counter() - start
 
 if __name__ == '__main__':
 
