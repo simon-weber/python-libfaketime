@@ -64,7 +64,7 @@ like ``pytest-xdist``, and simply for tests where subprocess is called. To
 keep them around, pass ``remove_vars=False`` like:
 
 ```python
-    reexec_if_needed(remove_vars=False)
+reexec_if_needed(remove_vars=False)
 ```
 
 Performance
