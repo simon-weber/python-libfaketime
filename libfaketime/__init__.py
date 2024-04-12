@@ -104,14 +104,15 @@ def main():  # pragma: nocover
     print('export %s=true' % _DID_REEXEC_VAR)
 
 
-def reexec_if_needed(remove_vars=True):
+def reexec_if_needed(remove_vars=True, quiet=False):
     needs_reload, env_additions = get_reload_information()
     if needs_reload:
         new_environ = os.environ.copy()
         new_environ.update(env_additions)
         new_environ[_DID_REEXEC_VAR] = 'true'
         args = [sys.executable, [sys.executable] + sys.argv, new_environ]
-        print('re-exec with libfaketime dependencies')
+        if not quiet:
+            print('re-exec with libfaketime dependencies')
         os.execve(*args)
 
     if remove_vars:
