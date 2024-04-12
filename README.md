@@ -87,7 +87,7 @@ timing 1000 executions of <function freeze_time at 0x10aaa1140>
 Use with py.test
 ----------------
 
-The [pytest-libfaketime](https://gitlab.com/yaal/pytest-libfaketime) plugin will automatically configure python-libfaketime for you:
+The [pytest-libfaketime](https://github.com/pytest-dev/pytest-libfaketime) plugin will automatically configure python-libfaketime for you:
 
 ```sh
 $ pip install pytest-libfaketime
