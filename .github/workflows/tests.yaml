@@ -1,0 +1,35 @@
+---
+name: tests
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    name: ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python:
+          - '3.12'
+          - '3.11'
+          - '3.10'
+          - '3.9'
+          - '3.8'
+        tz:
+          - 'utc'
+          - 'cest'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: pip|${{ hashFiles('setup.py') }}|${{ hashFiles('setup.cfg') }}
+      - run: pip install tox
+      - run: git submodule update --init
+      - run: make -C libfaketime/vendor/libfaketime
+      - run: tox -e ${{ matrix.python }}-${{ matrix.tz }}
