@@ -6,11 +6,16 @@ on:
 
 jobs:
   tests:
-    name: ${{ matrix.python }}
-    runs-on: ubuntu-latest
+    name: ${{ matrix.os }} - python${{ matrix.python }} - ${{ matrix.tz }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-22.04
+          - macos-14
+          - macos-13
+          - macos-12
         python:
           - '3.12'
           - '3.11'
@@ -21,11 +26,11 @@ jobs:
           - 'utc'
           - 'cest'
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - uses: actions/cache@v1
+      - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: pip|${{ hashFiles('setup.py') }}|${{ hashFiles('setup.cfg') }}
