@@ -1,0 +1,38 @@
+diff --git a/src/Makefile b/src/Makefile
+index 62e924c..6f03e26 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -110,7 +110,7 @@ PREFIX ?= /usr/local
+ LIBDIRNAME ?= /lib/faketime
+ PLATFORM ?=$(shell uname)
+ 
+-CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_PTHREAD -DFAKE_STAT -DFAKE_UTIME -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"' $(FAKETIME_COMPILE_CFLAGS)
++CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_PTHREAD -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"' $(FAKETIME_COMPILE_CFLAGS)
+ ifeq ($(PLATFORM),SunOS)
+ CFLAGS += -D__EXTENSIONS__ -D_XOPEN_SOURCE=600
+ endif
+diff --git a/src/libfaketime.c b/src/libfaketime.c
+index e632395..09d9019 100644
+--- a/src/libfaketime.c
++++ b/src/libfaketime.c
+@@ -2384,10 +2384,16 @@ static void parse_ft_string(const char *user_faked_time)
+       user_faked_time_tm.tm_isdst = -1;
+       nstime_str = strptime(user_faked_time, user_faked_time_fmt, &user_faked_time_tm);
+ 
++      /* the actual format has a " %f" appended. Parse out the microseconds. */
++      char nanosecond_str[7];
++      memcpy(&nanosecond_str, user_faked_time + 20, 6);
++      nanosecond_str[6] = '\0';
++      int nanoseconds = atoi(nanosecond_str) * 1000;
++
+       if (NULL != nstime_str)
+       {
+         user_faked_time_timespec.tv_sec = mktime(&user_faked_time_tm);
+-        user_faked_time_timespec.tv_nsec = 0;
++        user_faked_time_timespec.tv_nsec = nanoseconds;
+ 
+         if (nstime_str[0] == '.')
+         {
+-- 
+2.45.0
+

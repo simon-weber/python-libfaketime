@@ -6,7 +6,6 @@ import dateutil.parser
 import functools
 import inspect
 import os
-import platform
 import sys
 import threading
 import time
@@ -21,7 +20,6 @@ except NameError:
     basestring = (str, bytes)
 
 
-SIERRA_VERSION_TUPLE = (10, 12)
 
 # When using reexec_if_needed, remove_vars=True and a test loader that purges sys.modules
 # (like nose), it can be tough to run reexec_if_needed only once.
@@ -32,12 +30,6 @@ _DID_REEXEC_VAR = 'FAKETIME_DID_REEXEC'
 
 def _get_lib_path():
     vendor_dir = 'libfaketime'
-
-    if sys.platform == "darwin":
-        version_tuple = tuple(int(x) for x in platform.mac_ver()[0].split('.'))
-        pre_sierra = version_tuple < SIERRA_VERSION_TUPLE
-        if pre_sierra:
-            vendor_dir = 'libfaketime-pre_sierra'
 
     return os.path.join(
         os.path.dirname(__file__),
@@ -71,10 +63,12 @@ _lib_addition = {
 _other_additions = {
     'linux': {
         'DONT_FAKE_MONOTONIC': '1',
+        'FAKETIME_NO_CACHE': '1',
     },
     'darwi': {
         'DONT_FAKE_MONOTONIC': '1',
         'DYLD_FORCE_FLAT_NAMESPACE': '1',
+        'FAKETIME_NO_CACHE': '1',
     },
 }
 
