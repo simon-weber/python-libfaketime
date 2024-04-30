@@ -1,16 +1,3 @@
-diff --git a/src/Makefile b/src/Makefile
-index 62e924c..6f03e26 100644
---- a/src/Makefile
-+++ b/src/Makefile
-@@ -110,7 +110,7 @@ PREFIX ?= /usr/local
- LIBDIRNAME ?= /lib/faketime
- PLATFORM ?=$(shell uname)
- 
--CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_PTHREAD -DFAKE_STAT -DFAKE_UTIME -DFAKE_SLEEP -DFAKE_TIMERS -DFAKE_INTERNAL_CALLS -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"' $(FAKETIME_COMPILE_CFLAGS)
-+CFLAGS += -std=gnu99 -Wall -Wextra -Werror -Wno-nonnull-compare -DFAKE_PTHREAD -fPIC -DPREFIX='"'$(PREFIX)'"' -DLIBDIRNAME='"'$(LIBDIRNAME)'"' $(FAKETIME_COMPILE_CFLAGS)
- ifeq ($(PLATFORM),SunOS)
- CFLAGS += -D__EXTENSIONS__ -D_XOPEN_SOURCE=600
- endif
 diff --git a/src/libfaketime.c b/src/libfaketime.c
 index e632395..09d9019 100644
 --- a/src/libfaketime.c

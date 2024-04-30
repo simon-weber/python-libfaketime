@@ -165,8 +165,11 @@ Contributions are welcome! You should compile libfaketime before running tests:
 
 ```bash
 git submodule init --update
-git apply --directory libfaketime/vendor/libfaketime libfaketime/vendor/libfaketime.patch
-make -C libfaketime/vendor/libfaketime
+git apply --directory libfaketime/vendor/libfaketime libfaketime/vendor/nanosecond.patch
+# For Linux:
+env FAKETIME_COMPILE_CFLAGS="-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP" make -C libfaketime/vendor/libfaketime
+# For macOS
+env make -C libfaketime/vendor/libfaketime
 ```
 
 Then you can install requirements with ``pip install -r requirements.txt`` and use ``pytest`` and ``tox`` to run the tests.
