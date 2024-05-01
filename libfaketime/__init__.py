@@ -26,7 +26,7 @@ except NameError:
 # This env var is set by reexec to ensure we don't reload more than once.
 
 _DID_REEXEC_VAR = 'FAKETIME_DID_REEXEC'
-
+_FAKETIME_FMT = '%Y-%m-%d %T.%f'
 
 def _get_lib_path():
     vendor_dir = 'libfaketime'
@@ -162,7 +162,7 @@ class fake_time:
         return None
 
     def _format_datetime(self, _datetime):
-        return _datetime.strftime('%Y-%m-%d %T %f')
+        return _datetime.strftime(_FAKETIME_FMT)
 
     def tick(self, delta=datetime.timedelta(seconds=1)):
         self.time_to_freeze += delta
@@ -173,11 +173,13 @@ class fake_time:
             begin_callback(self)
             self._prev_spec = os.environ.get('FAKETIME')
             self._prev_tz = os.environ.get('TZ')
+            self._prev_fmt = os.environ.get('FAKETIME_FMT')
 
             os.environ['TZ'] = self.timezone_str
 
             time.tzset()
             os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
+            os.environ['FAKETIME_FMT'] = _FAKETIME_FMT
 
         func_name = self._should_patch_uuid()
         if func_name:
@@ -202,7 +204,13 @@ class fake_time:
                 os.environ['FAKETIME'] = self._prev_spec
             else:
                 del os.environ['FAKETIME']
-                end_callback(self)
+
+            if self._prev_fmt is not None:
+                os.environ['FAKETIME_FMT'] = self._prev_spec
+            else:
+                del os.environ['FAKETIME_FMT']
+
+            end_callback(self)
 
         return False
 

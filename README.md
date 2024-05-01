@@ -165,7 +165,6 @@ Contributions are welcome! You should compile libfaketime before running tests:
 
 ```bash
 git submodule init --update
-git apply --directory libfaketime/vendor/libfaketime libfaketime/vendor/nanosecond.patch
 # For Linux:
 env FAKETIME_COMPILE_CFLAGS="-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP" make -C libfaketime/vendor/libfaketime
 # For macOS

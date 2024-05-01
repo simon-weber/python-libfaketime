@@ -38,7 +38,6 @@ faketime_lib = os.path.join(_vendor_path, 'src', libname)
 class CustomInstall(install):
     def run(self):
         self.my_outputs = []
-        subprocess.check_call(['patch', '-p1', '<', '../nanosecond.patch'], cwd=_vendor_path, shell=True)
         if sys.platform in ("linux", "linux2"):
             subprocess.check_call(['env', 'FAKETIME_COMPILE_CFLAGS=-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP', 'make', '-C', _vendor_path])
         elif sys.platform == "darwin":
