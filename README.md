@@ -78,6 +78,22 @@ To avoid displaying the informative text when re-executing, you can set the
 reexec_if_needed(quiet=True)
 ```
 
+### timestamp_file
+
+A common time can be shared between several execution contexts by using a file
+to store the time to mock, instead of environment variables. This is useful
+to control the time of a running process for instance. Here is a schematized
+use case:
+
+```python
+reexec_if_needed(remove_vars=False)
+
+with fake_time("1970-01-01 00:00:00", timestamp_file="/tmp/timestamp"):
+    subprocess.run("/some/server/process")
+
+with fake_time("2000-01-01 00:00:00", timestamp_file="/tmp/timestamp"):
+    assert request_the_server_process_date() == "2000-01-01 00:00:00"
+
 Performance
 -----------
 

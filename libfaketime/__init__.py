@@ -126,13 +126,18 @@ def end_callback(instance):
 
 
 class fake_time:
-    def __init__(self, datetime_spec, only_main_thread=True, tz_offset=None):
+    def __init__(self, datetime_spec=None, only_main_thread=True, tz_offset=None, timestamp_file=None):
         self.only_main_thread = only_main_thread
         self.timezone_str = 'UTC'
         if tz_offset is not None:
             self.timezone_str = 'Etc/GMT{0:+}'.format(-tz_offset)
 
+        if not datetime_spec and not timestamp_file:
+            raise ValueError("Either 'datetime_spec' or 'timestamp_file' must be passed.")
+
         self.time_to_freeze = datetime_spec
+        self.timestamp_file = timestamp_file
+
         if isinstance(datetime_spec, basestring):
             self.time_to_freeze = utc.localize(dateutil.parser.parse(datetime_spec)) \
                 .astimezone(timezone(self.timezone_str))
@@ -164,9 +169,18 @@ class fake_time:
     def _format_datetime(self, _datetime):
         return _datetime.strftime(_FAKETIME_FMT)
 
+    def _update_time(self, time):
+        if not self.timestamp_file:
+            os.environ['FAKETIME'] = self._format_datetime(time)
+        else:
+            if time:
+                with open(self.timestamp_file, "w") as fd:
+                    fd.write(self._format_datetime(time))
+            os.environ['FAKETIME_TIMESTAMP_FILE'] = self.timestamp_file
+
     def tick(self, delta=datetime.timedelta(seconds=1)):
         self.time_to_freeze += delta
-        os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
+        self._update_time(self.time_to_freeze)
 
     def __enter__(self):
         if self._should_fake():
@@ -174,11 +188,12 @@ class fake_time:
             self._prev_spec = os.environ.get('FAKETIME')
             self._prev_tz = os.environ.get('TZ')
             self._prev_fmt = os.environ.get('FAKETIME_FMT')
+            self._prev_timestamp_file = os.environ.get('FAKETIME_TIMESTAMP_FILE')
 
             os.environ['TZ'] = self.timezone_str
 
             time.tzset()
-            os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
+            self._update_time(self.time_to_freeze)
             os.environ['FAKETIME_FMT'] = _FAKETIME_FMT
 
         func_name = self._should_patch_uuid()
@@ -200,10 +215,17 @@ class fake_time:
                 del os.environ['TZ']
             time.tzset()
 
-            if self._prev_spec is not None:
-                os.environ['FAKETIME'] = self._prev_spec
+            if self.timestamp_file:
+                if self._prev_timestamp_file is not None:
+                    os.environ['FAKETIME_TIMESTAMP_FILE'] = self._prev_timestamp_file
+                elif 'FAKETIME_TIMESTAMP_FILE' in os.environ:
+                    del os.environ['FAKETIME_TIMESTAMP_FILE']
+
             else:
-                del os.environ['FAKETIME']
+                if self._prev_spec is not None:
+                    os.environ['FAKETIME'] = self._prev_spec
+                else:
+                    del os.environ['FAKETIME']
 
             if self._prev_fmt is not None:
                 os.environ['FAKETIME_FMT'] = self._prev_spec
