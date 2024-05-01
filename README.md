@@ -1,7 +1,7 @@
 python-libfaketime: fast date/time mocking
 ==========================================
 
-[![github actions](https://github.com/simon-weber/python-libfaketime/actions/workflows/main.yml/badge.svg)](https://github.com/simon-weber/python-libfaketime/actions)
+[![github actions](https://github.com/simon-weber/python-libfaketime/actions/workflows/tests.yaml/badge.svg)](https://github.com/simon-weber/python-libfaketime/actions/workflows/tests.yaml)
 [![pypi](https://img.shields.io/pypi/v/libfaketime.svg)](https://pypi.python.org/pypi/libfaketime)
 [![repominder](https://img.shields.io/badge/dynamic/json.svg?label=release&query=%24.status&maxAge=43200&uri=https%3A%2F%2Fwww.repominder.com%2Fbadge%2FeyJmdWxsX25hbWUiOiAic2ltb24td2ViZXIvcHl0aG9uLWxpYmZha2V0aW1lIn0%3D%2F&link=https%3A%2F%2Fwww.repominder.com%2F)](https://www.repominder.com)
 
