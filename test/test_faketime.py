@@ -87,6 +87,21 @@ class TestFaketime():
     def test_monotonic_not_mocked(self):
         assert os.environ['DONT_FAKE_MONOTONIC'] == '1'
 
+    def test_timestmap_file(self, tmpdir):
+        file_path = str(tmpdir / "faketime.rc")
+
+        with fake_time('2000-01-01 10:00:05', timestamp_file=file_path) as fake:
+            assert datetime.datetime(2000, 1, 1, 10, 0, 5) == datetime.datetime.now()
+            with open(file_path) as fd:
+                assert fd.read() == "2000-01-01 10:00:05.000000"
+
+            fake.tick(delta=datetime.timedelta(hours=1))
+            assert datetime.datetime(2000, 1, 1, 11, 0, 5) == datetime.datetime.now()
+            with open(file_path) as fd:
+                assert fd.read() == "2000-01-01 11:00:05.000000"
+
+        with fake_time(timestamp_file=file_path):
+            assert datetime.datetime(2000, 1, 1, 11, 0, 5) == datetime.datetime.now()
 
 class TestUUID1Deadlock():
 
