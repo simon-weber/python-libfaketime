@@ -1,8 +1,4 @@
 [submodule "vendor/libfaketime"]
 	path = libfaketime/vendor/libfaketime
-	url = https://github.com/simon-weber/libfaketime.git
+	url = https://github.com/wolfcw/libfaketime.git
 	branch = python-libfaketime
-[submodule "vendor/libfaketime-pre_sierra"]
-	path = libfaketime/vendor/libfaketime-pre_sierra
-	url = https://github.com/simon-weber/libfaketime.git
-	branch = python-libfaketime-pre_sierra

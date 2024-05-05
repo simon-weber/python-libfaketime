@@ -147,6 +147,7 @@ In some cases - especially when your tests start other processes - re-execing ca
 $ python-libfaketime
 export LD_PRELOAD="/home/foo/<snip>/vendor/libfaketime/src/libfaketime.so.1"
 export DONT_FAKE_MONOTONIC="1"
+export FAKETIME_NO_CACHE="1"
 export FAKETIME_DID_REEXEC=true
 ```
 
@@ -163,7 +164,11 @@ Contributing and testing
 Contributions are welcome! You should compile libfaketime before running tests:
 
 ```bash
-make -C libfaketime/vendor/libfaketime
+git submodule init --update
+# For Linux:
+env FAKETIME_COMPILE_CFLAGS="-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP" make -C libfaketime/vendor/libfaketime
+# For macOS
+env make -C libfaketime/vendor/libfaketime
 ```
 
 Then you can install requirements with ``pip install -r requirements.txt`` and use ``pytest`` and ``tox`` to run the tests.

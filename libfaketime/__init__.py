@@ -6,7 +6,6 @@ import dateutil.parser
 import functools
 import inspect
 import os
-import platform
 import sys
 import threading
 import time
@@ -21,23 +20,16 @@ except NameError:
     basestring = (str, bytes)
 
 
-SIERRA_VERSION_TUPLE = (10, 12)
 
 # When using reexec_if_needed, remove_vars=True and a test loader that purges sys.modules
 # (like nose), it can be tough to run reexec_if_needed only once.
 # This env var is set by reexec to ensure we don't reload more than once.
 
 _DID_REEXEC_VAR = 'FAKETIME_DID_REEXEC'
-
+_FAKETIME_FMT = '%Y-%m-%d %T.%f'
 
 def _get_lib_path():
     vendor_dir = 'libfaketime'
-
-    if sys.platform == "darwin":
-        version_tuple = tuple(int(x) for x in platform.mac_ver()[0].split('.'))
-        pre_sierra = version_tuple < SIERRA_VERSION_TUPLE
-        if pre_sierra:
-            vendor_dir = 'libfaketime-pre_sierra'
 
     return os.path.join(
         os.path.dirname(__file__),
@@ -71,10 +63,12 @@ _lib_addition = {
 _other_additions = {
     'linux': {
         'DONT_FAKE_MONOTONIC': '1',
+        'FAKETIME_NO_CACHE': '1',
     },
     'darwi': {
         'DONT_FAKE_MONOTONIC': '1',
         'DYLD_FORCE_FLAT_NAMESPACE': '1',
+        'FAKETIME_NO_CACHE': '1',
     },
 }
 
@@ -168,7 +162,7 @@ class fake_time:
         return None
 
     def _format_datetime(self, _datetime):
-        return _datetime.strftime('%Y-%m-%d %T %f')
+        return _datetime.strftime(_FAKETIME_FMT)
 
     def tick(self, delta=datetime.timedelta(seconds=1)):
         self.time_to_freeze += delta
@@ -179,11 +173,13 @@ class fake_time:
             begin_callback(self)
             self._prev_spec = os.environ.get('FAKETIME')
             self._prev_tz = os.environ.get('TZ')
+            self._prev_fmt = os.environ.get('FAKETIME_FMT')
 
             os.environ['TZ'] = self.timezone_str
 
             time.tzset()
             os.environ['FAKETIME'] = self._format_datetime(self.time_to_freeze)
+            os.environ['FAKETIME_FMT'] = _FAKETIME_FMT
 
         func_name = self._should_patch_uuid()
         if func_name:
@@ -208,7 +204,13 @@ class fake_time:
                 os.environ['FAKETIME'] = self._prev_spec
             else:
                 del os.environ['FAKETIME']
-                end_callback(self)
+
+            if self._prev_fmt is not None:
+                os.environ['FAKETIME_FMT'] = self._prev_spec
+            else:
+                del os.environ['FAKETIME_FMT']
+
+            end_callback(self)
 
         return False
 
