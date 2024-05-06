@@ -41,3 +41,9 @@ jobs:
       - run: make -C libfaketime/vendor/libfaketime
         if: runner.os == 'macOS'
       - run: tox -e ${{ matrix.python }}-${{ matrix.tz }} --recreate
+
+  style:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pre-commit/action@v3.0.1
