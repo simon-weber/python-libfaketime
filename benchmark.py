@@ -2,9 +2,10 @@ import datetime
 import sys
 import time
 
+from freezegun import freeze_time as freezegun_fake_time
+
 from libfaketime import fake_time as lft_fake_time
 from libfaketime import reexec_if_needed
-from freezegun import freeze_time as freezegun_fake_time
 
 
 def sample(faker):
@@ -17,9 +18,9 @@ def sample(faker):
 
     return time.perf_counter() - start
 
-if __name__ == '__main__':
 
-    if len(sys.argv) > 1 and sys.argv[1] == 'freezegun':
+if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "freezegun":
         faker = freezegun_fake_time
     else:
         faker = lft_fake_time
@@ -27,10 +28,10 @@ if __name__ == '__main__':
 
     iterations = 1000
 
-    print("timing %s executions of %s" % (iterations, faker))
+    print(f"timing {iterations} executions of {faker}")
 
     sum = 0
     for _ in range(iterations):
         sum += sample(faker)
 
-    print(sum, 'seconds')
+    print(sum, "seconds")
