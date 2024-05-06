@@ -10,6 +10,7 @@ from libfaketime import fake_time
 # - Fix time.localtime
 # - Fix time.strftime
 
+# mark these as being used (via eval)
 assert time
 assert datetime
 
