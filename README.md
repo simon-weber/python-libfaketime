@@ -93,6 +93,7 @@ with fake_time("1970-01-01 00:00:00", timestamp_file="/tmp/timestamp"):
 
 with fake_time("2000-01-01 00:00:00", timestamp_file="/tmp/timestamp"):
     assert request_the_server_process_date() == "2000-01-01 00:00:00"
+```
 
 Performance
 -----------
