@@ -3,6 +3,16 @@ Changelog
 
 [Semantic versioning](http://semver.org/) is used.
 
+2.1.0
+-----
+released 2024-05-17
+
+Thanks for @azmeuk for all their contributions to this release!
+
+- add support for timestamp files, which enables freezing time across subprocesses: [#78](https://github.com/simon-weber/python-libfaketime/pull/78)
+- upgrade underlying libfaketime to 0.9.10 without modifications: [#75](https://github.com/simon-weber/python-libfaketime/pull/75)
+- add a quiet param to rexec_if_needed: [#72](https://github.com/simon-weber/python-libfaketime/pull/72)
+
 2.0.0
 -----
 released 2020-04-17
