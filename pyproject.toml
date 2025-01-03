@@ -1,13 +1,26 @@
 [tool.ruff.lint]
 select = [
+    "D", # pydocstyle
     "E", # pycodestyle
     "F", # pyflakes
     "I", # isort
     "UP", # pyupgrade
 ]
+ignore = [
+    "D100", # public module
+    "D101", # public class
+    "D102", # public method
+    "D103", # public function
+    "D104", # public package
+    "D105", # magic method
+    "D106", # nested class
+    "D107", # public init
+    "D203", # no-blank-line-before-class
+    "D213", # multi-line-summary-second-line
+]
 
 [tool.ruff.lint.isort]
 force-single-line = true
 
-[too.ruff.format]
+[tool.ruff.format]
 docstring-code-format = true
