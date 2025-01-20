@@ -15,7 +15,6 @@ jobs:
           - ubuntu-22.04
           - macos-14
           - macos-13
-          - macos-12
         python:
           - '3.12'
           - '3.11'
