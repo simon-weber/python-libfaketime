@@ -3,6 +3,16 @@ Changelog
 
 [Semantic versioning](http://semver.org/) is used.
 
+3.0.0
+-----
+released 2025-01-20
+
+Thanks for @azmeuk for their contributions to this release.
+
+- breaking: drop support for python 3.8
+- disable FAKETIME_FORCE_MONOTONIC_FIX to attempt to fix a performance regression in 2.1.0: [#81](https://github.com/simon-weber/python-libfaketime/issues/81)
+- add support for python 3.13
+
 2.1.0
 -----
 released 2024-05-17
