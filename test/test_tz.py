@@ -9,7 +9,10 @@ from libfaketime import fake_time
 
 
 def test_timezone_is_restored_after_context_manager_usage():
-    """https://github.com/simon-weber/python-libfaketime/issues/43"""
+    """Check that timezones are restored when faketime context manager are closed.
+
+    https://github.com/simon-weber/python-libfaketime/issues/43
+    """
     now1 = datetime.datetime.now()
     utcnow1 = datetime.datetime.utcnow()
 
@@ -37,8 +40,7 @@ def test_tzinfo_is_normalized():
 
 
 def test_block_setting_of_conflicting_tz_info():
-    """Cannot pass in tz_offset when the timestamp already carries a
-    timezone."""
+    """Cannot pass in tz_offset when the timestamp already carries a timezone."""
     with pytest.raises(Exception) as exc_info:
         timezone_to_test_with = timezone("America/Havana")
         time_to_freeze = timezone_to_test_with.localize(
@@ -55,7 +57,10 @@ def test_block_setting_of_conflicting_tz_info():
 
 @pytest.mark.parametrize("offset", range(-2, 3))
 def test_generated_tz_is_valid(offset):
-    """https://github.com/simon-weber/python-libfaketime/issues/46"""
+    """Check that generated timezones are valid.
+
+    https://github.com/simon-weber/python-libfaketime/issues/46
+    """
     now = datetime.datetime.now()
 
     with fake_time(now, tz_offset=offset):

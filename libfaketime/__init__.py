@@ -86,7 +86,6 @@ def get_reload_information():
 
 def main():  # pragma: nocover
     """Print the necessary environment to stdout."""
-
     _, _env_additions = get_reload_information()
     for key, value in _env_additions.items():
         print(f'export {key}="{value}"')
@@ -111,12 +110,12 @@ def reexec_if_needed(remove_vars=True, quiet=False):
 
 
 def begin_callback(instance):
-    """Called just before faking the time."""
+    """Execute custom code just before faking the time."""
     pass
 
 
 def end_callback(instance):
-    """Called just after finished faking the time."""
+    """Execute custom code after finished faking the time."""
     pass
 
 

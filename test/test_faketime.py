@@ -110,8 +110,10 @@ class TestFaketime:
 class TestUUID1Deadlock:
     @fake_time(datetime.datetime.now())
     def test_uuid1_does_not_deadlock(self):
-        """This test will deadlock if we fail to patch a system level uuid
-        library."""
+        """Check the compatibility of uuid1.
+
+        This test will deadlock if we fail to patch a system level uuid library.
+        """
         for i in range(100):
             uuid.uuid1()
 
