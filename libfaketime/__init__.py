@@ -57,11 +57,13 @@ _other_additions = {
     "linux": {
         "DONT_FAKE_MONOTONIC": "1",
         "FAKETIME_NO_CACHE": "1",
+        "FAKETIME_FORCE_MONOTONIC_FIX": "0",
     },
     "darwi": {
         "DONT_FAKE_MONOTONIC": "1",
         "DYLD_FORCE_FLAT_NAMESPACE": "1",
         "FAKETIME_NO_CACHE": "1",
+        "FAKETIME_FORCE_MONOTONIC_FIX": "0",
     },
 }
 
