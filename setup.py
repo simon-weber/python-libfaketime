@@ -40,10 +40,13 @@ class CustomInstall(install):
     def run(self):
         self.my_outputs = []
         if sys.platform in ("linux", "linux2"):
+            # -Wno-unused-function works around a libfaketime 0.9.13 build
+            # failure under -UFAKE_SLEEP; drop it once 0.9.14 is vendored.
             subprocess.check_call(
                 [
                     "env",
-                    "FAKETIME_COMPILE_CFLAGS=-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP",
+                    "FAKETIME_COMPILE_CFLAGS="
+                    "-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP -Wno-unused-function",
                     "make",
                     "-C",
                     _vendor_path,

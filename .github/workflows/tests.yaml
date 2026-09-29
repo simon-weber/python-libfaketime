@@ -35,7 +35,7 @@ jobs:
           key: pip|${{ hashFiles('setup.py') }}|${{ hashFiles('setup.cfg') }}
       - run: pip install tox
       - run: git submodule update --init --force
-      - run: env FAKETIME_COMPILE_CFLAGS="-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP" make -C libfaketime/vendor/libfaketime
+      - run: env FAKETIME_COMPILE_CFLAGS="-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP -Wno-unused-function" make -C libfaketime/vendor/libfaketime
         if: runner.os == 'Linux'
       - run: make -C libfaketime/vendor/libfaketime
         if: runner.os == 'macOS'

@@ -183,7 +183,7 @@ Contributions are welcome! You should compile libfaketime before running tests:
 ```bash
 git submodule init --update
 # For Linux:
-env FAKETIME_COMPILE_CFLAGS="-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP" make -C libfaketime/vendor/libfaketime
+env FAKETIME_COMPILE_CFLAGS="-UFAKE_STAT -UFAKE_UTIME -UFAKE_SLEEP -Wno-unused-function" make -C libfaketime/vendor/libfaketime
 # For macOS
 env make -C libfaketime/vendor/libfaketime
 ```

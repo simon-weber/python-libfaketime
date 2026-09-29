@@ -3,11 +3,14 @@ Changelog
 
 [Semantic versioning](http://semver.org/) is used.
 
-3.1.0
+4.0.0
 -----
+released ...
 
 - breaking: drop support for python 3.9 and 3.10
 - add support for python 3.14
+- upgrade vendored libfaketime to 0.9.13 without modifications, fixing build failures with recent glibc versions and compilers defaulting to ISO C23
+- build the vendored libfaketime with `-Wno-unused-function`, to work around an upstream build failure in 0.9.13
 
 3.0.1
 -----
