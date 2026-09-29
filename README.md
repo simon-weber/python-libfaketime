@@ -8,7 +8,7 @@ python-libfaketime: fast date/time mocking
 python-libfaketime is a wrapper of [libfaketime](https://github.com/wolfcw/libfaketime) for python.
 Some brief details:
 
-* Linux and OS X, Pythons 3.8 through 3.12, pypy and pypy3
+* Linux and OS X, Pythons 3.11 through 3.14, pypy and pypy3
 * Mostly compatible with [freezegun](https://github.com/spulec/freezegun).
 * Microsecond resolution.
 * Accepts datetimes and strings that can be parsed by dateutil.
