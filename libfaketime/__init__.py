@@ -168,9 +168,11 @@ class fake_time:
     def _should_patch_uuid(self):
         # Return the name of the uuid time generate function, or None if not present.
         # This must be patched to avoid uuid1 deadlocks in OS uuid libraries.
+        print("uuid params", repr(dir(uuid)))
         if self._should_fake() and not self._prev_spec:
             for func_name in self._uuid_func_names:
                 if hasattr(uuid, func_name):
+                    print("patching", func_name)
                     return func_name
 
         return None
