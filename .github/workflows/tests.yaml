@@ -12,10 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-24.04
-          - ubuntu-22.04
-          - macos-14
-          - macos-13
+          - ubuntu-latest
+          - macos-latest
         python:
           - '3.14'
           - '3.13'
