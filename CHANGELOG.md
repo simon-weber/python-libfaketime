@@ -3,6 +3,12 @@ Changelog
 
 [Semantic versioning](http://semver.org/) is used.
 
+3.1.0
+-----
+
+- breaking: drop support for python 3.9 and 3.10
+- add support for python 3.14
+
 3.0.1
 -----
 released 2026-08-19

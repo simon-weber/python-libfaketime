@@ -82,6 +82,7 @@ setup(
     description="A fast alternative to freezegun that wraps libfaketime.",
     long_description=(open("README.md").read() + "\n\n" + open("CHANGELOG.md").read()),
     long_description_content_type="text/markdown",
+    python_requires=">=3.11",
     install_requires=[
         "python-dateutil >= 1.3",
         "pytz",  # for pytz.timezone and pytz.utc
@@ -92,11 +93,10 @@ setup(
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Software Development :: Libraries :: Python Modules",
