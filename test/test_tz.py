@@ -7,6 +7,8 @@ from pytz import timezone
 
 from libfaketime import fake_time
 
+UTC = datetime.timezone.utc
+
 
 def test_timezone_is_restored_after_context_manager_usage():
     """Check that timezones are restored when faketime context manager are closed.
@@ -14,13 +16,13 @@ def test_timezone_is_restored_after_context_manager_usage():
     https://github.com/simon-weber/python-libfaketime/issues/43
     """
     now1 = datetime.datetime.now()
-    utcnow1 = datetime.datetime.utcnow()
+    utcnow1 = datetime.datetime.now(UTC)
 
     with fake_time(now1):
         datetime.datetime.now()
 
     now2 = datetime.datetime.now()
-    utcnow2 = datetime.datetime.utcnow()
+    utcnow2 = datetime.datetime.now(UTC)
 
     assert abs((now2 - now1).total_seconds()) < 10
     assert abs((utcnow2 - utcnow1).total_seconds()) < 10
@@ -37,6 +39,9 @@ def test_tzinfo_is_normalized():
         # The timeshift of Europe/Brussels is UTC+1 in January
         assert datetime.datetime.now() == datetime.datetime(2017, 1, 2, 15, 2)
         assert datetime.datetime.utcnow() == datetime.datetime(2017, 1, 2, 14, 2)
+        assert datetime.datetime.now(UTC) == datetime.datetime(
+            2017, 1, 2, 14, 2, tzinfo=UTC
+        )
 
 
 def test_block_setting_of_conflicting_tz_info():

@@ -1,3 +1,9 @@
+[tool.pytest.ini_options]
+filterwarnings = [
+    # utcnow() is still covered on purpose: it remains supported and used
+    "ignore:datetime.datetime.utcnow:DeprecationWarning",
+]
+
 [tool.ruff.lint]
 select = [
     "D", # pydocstyle
