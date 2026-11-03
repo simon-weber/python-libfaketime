@@ -4,4 +4,6 @@ mock==5.1.0
 pytest==8.2.0
 python-dateutil==2.9.0post0
 pytz==2024.1
+setuptools>=70.1.0
 tox==4.15.0
+wheel

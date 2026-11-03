@@ -7,6 +7,7 @@ Changelog
 -----
 released ...
 
+- tag wheels for their build platform so pip does not install an incompatible shared library on ARM64
 - breaking: drop support for python 3.9 and 3.10
 - add support for python 3.14
 - upgrade vendored libfaketime to 0.9.13 without modifications, fixing build failures with recent glibc versions and compilers defaulting to ISO C23

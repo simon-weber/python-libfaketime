@@ -23,6 +23,10 @@ Installation
 $ pip install libfaketime
 ```
 
+Wheels contain a native library and are platform-specific. If a compatible wheel
+is not available, installation builds the library from source and requires `make`
+and a C compiler.
+
 Usage
 -----
 

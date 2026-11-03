@@ -5,8 +5,10 @@ import re
 import subprocess
 import sys
 
+from setuptools import Distribution
 from setuptools import find_packages
 from setuptools import setup
+from setuptools.command.bdist_wheel import bdist_wheel
 from setuptools.command.install import install
 
 # This hack is from http://stackoverflow.com/a/7071358/1231454;
@@ -36,6 +38,23 @@ else:
 faketime_lib = os.path.join(_vendor_path, "src", libname)
 
 
+class BinaryDistribution(Distribution):
+    """A distribution containing a platform-specific shared library."""
+
+    def has_ext_modules(self) -> bool:
+        """Use the platform library directory for the bundled native library."""
+        return True
+
+
+class PlatformWheel(bdist_wheel):
+    """A platform-specific wheel without a Python ABI dependency."""
+
+    def get_tag(self) -> tuple[str, str, str]:
+        """Keep Python compatibility while selecting the build platform."""
+        _, _, platform_tag = super().get_tag()
+        return "py3", "none", platform_tag
+
+
 class CustomInstall(install):
     def run(self):
         self.my_outputs = []
@@ -55,7 +74,7 @@ class CustomInstall(install):
         elif sys.platform == "darwin":
             subprocess.check_call(["make", "-C", _vendor_path])
 
-        dest = os.path.join(self.install_purelib, os.path.dirname(faketime_lib))
+        dest = os.path.join(self.install_lib, os.path.dirname(faketime_lib))
         try:
             os.makedirs(dest)
         except OSError as e:
@@ -106,7 +125,8 @@ setup(
     ],
     include_package_data=True,
     zip_safe=False,
-    cmdclass={"install": CustomInstall},
+    distclass=BinaryDistribution,
+    cmdclass={"bdist_wheel": PlatformWheel, "install": CustomInstall},
     entry_points={
         "console_scripts": [
             "python-libfaketime = libfaketime:main",
